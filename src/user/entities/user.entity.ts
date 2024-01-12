@@ -1,8 +1,9 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
-import { ArticleEntity } from '@/modules/article/entities/article.entity';
-import { FollowEntity } from './follow.entity';
 import { QINIU } from '#/index';
+import { UserGender } from '@/common/common.enum';
+import { AddressEntity } from '@/modules/address/entities/address.entity';
+import { CartEntity } from '@/modules/cart/entities/cart.entity';
 
 @Entity('user')
 export class UserEntity extends CommonEntity {
@@ -31,9 +32,19 @@ export class UserEntity extends CommonEntity {
   @Column({ type: 'timestamp', nullable: true })
   birthday: Date;
 
-  @OneToMany(() => ArticleEntity, (entity) => entity.author)
-  articles: ArticleEntity[];
+  @Column({
+    type: 'enum',
+    enum: UserGender,
+    default: UserGender.MEN,
+  })
+  gender: UserGender;
 
-  @ManyToOne(() => FollowEntity, (entity) => entity.users)
-  follow: FollowEntity;
+  @Column({ nullable: true })
+  profession: string;
+
+  @OneToMany(() => AddressEntity, (entity) => entity.user)
+  address: AddressEntity[];
+
+  @OneToMany(() => CartEntity, (entity) => entity.user)
+  cart: CartEntity[];
 }

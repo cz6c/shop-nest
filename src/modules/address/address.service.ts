@@ -1,49 +1,49 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { MapRecordEntity } from './entities/map_record.entity';
+import { AddressEntity } from './entities/address.entity';
 import {
-  CreateMapRecordDto,
-  UpdateMapRecordDto,
-  MapRecordVO,
-  MapRecordListParamsDto,
-  MapRecordListVO,
+  CreateAddressDto,
+  UpdateAddressDto,
+  AddressVO,
+  AddressListParamsDto,
+  AddressListVO,
 } from './dto/index.dto';
 
 @Injectable()
-export class MapRecordService {
+export class AddressService {
   constructor(
-    @InjectRepository(MapRecordEntity)
-    private readonly memorialDayRepository: Repository<MapRecordEntity>,
+    @InjectRepository(AddressEntity)
+    private readonly memorialDayRepository: Repository<AddressEntity>,
   ) {}
 
   // 创建
-  async create(data: CreateMapRecordDto, followId: number) {
+  async create(data: CreateAddressDto, userId: number) {
     const newItem = this.memorialDayRepository.create({
       ...data,
-      follow: { id: followId },
+      user: { id: userId },
     });
     return await this.memorialDayRepository.save(newItem);
   }
 
   // 分页列表
   async findAll(
-    query: MapRecordListParamsDto,
-    followId: number,
-  ): Promise<MapRecordListVO> {
-    const { content, page, limit } = query;
+    query: AddressListParamsDto,
+    userId: number,
+  ): Promise<AddressListVO> {
+    const { receiver, page, limit } = query;
     const where: Record<string, any> = {
       isDelete: false,
-      follow: { id: followId },
+      user: { id: userId },
     };
-    if (content) {
-      where.content = Like(`%${content}%`);
+    if (receiver) {
+      where.receiver = Like(`%${receiver}%`);
     }
     const skip = (page && limit && (page - 1) * limit) ?? 0;
     const take = limit ?? 0;
     const [list, total] = await this.memorialDayRepository.findAndCount({
       where,
-      order: { eventDate: 'DESC' },
+      order: { updateTime: 'DESC' },
       skip,
       take,
     });
@@ -51,7 +51,7 @@ export class MapRecordService {
   }
 
   // 详情
-  async findOne(id: number): Promise<MapRecordVO> {
+  async findOne(id: number): Promise<AddressVO> {
     const item = await this.memorialDayRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -62,7 +62,7 @@ export class MapRecordService {
   }
 
   // 更新
-  async update(data: UpdateMapRecordDto) {
+  async update(data: UpdateAddressDto) {
     const { id } = data;
     const item = await this.memorialDayRepository.findOne({
       where: { id, isDelete: false },

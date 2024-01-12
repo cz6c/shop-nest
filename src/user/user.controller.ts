@@ -12,12 +12,9 @@ import {
   UserVO,
   UserListVO,
   UserListParamsDto,
-  UpdateFollowDto,
-  FollowVo,
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 import { Public } from '@/decorator/public-auth.decorator';
-import { UserDto } from '@/auth/dto/auth.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('用户管理')
@@ -57,27 +54,5 @@ export class UserController {
   @Post('delete')
   async remove(@Body() data: IdDto) {
     return await this.userService.remove(data.id);
-  }
-
-  @ApiOperation({ summary: '绑定关系' })
-  @Get('follow')
-  async follow(@Query() params: IdDto, @GetUser() user: UserDto) {
-    return await this.userService.follow(params.id, user);
-  }
-
-  @ApiOperation({ summary: '获取绑定信息' })
-  @ApiOkResponse({ type: FollowVo })
-  @Get('getFollow')
-  async getFollow(@GetUser('followId') followId: number) {
-    return await this.userService.getFollow(followId);
-  }
-
-  @ApiOperation({ summary: '更新绑定信息' })
-  @Post('updateFollow')
-  async updateFollow(
-    @Body() data: UpdateFollowDto,
-    @GetUser('followId') followId: number,
-  ) {
-    return await this.userService.updateFollow(data, followId);
   }
 }

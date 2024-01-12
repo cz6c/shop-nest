@@ -1,4 +1,10 @@
-import { IsOptional, IsString, IsDate, IsNotEmpty } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsDate,
+  IsNotEmpty,
+  IsEnum,
+} from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -6,6 +12,7 @@ import {
   PartialType,
 } from '@nestjs/swagger';
 import { PaginationDto, PaginationVO, CommonVO } from '@/common/common.dto';
+import { UserGender } from '@/common/common.enum';
 
 export class CreateUserDto {
   @ApiProperty({ description: '用户名' })
@@ -39,6 +46,18 @@ export class UpdateUserDto extends OmitType(PartialType(CreateUserDto), [
   @IsDate()
   @IsNotEmpty()
   readonly birthday: Date;
+
+  @ApiPropertyOptional({ description: '性别' })
+  @IsOptional()
+  @IsEnum(UserGender)
+  @IsNotEmpty()
+  readonly gender: UserGender;
+
+  @ApiPropertyOptional({ description: '职位' })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  readonly profession: string;
 }
 
 export class UserVO extends CommonVO {
@@ -53,6 +72,12 @@ export class UserVO extends CommonVO {
 
   @ApiPropertyOptional({ description: '生日' })
   readonly birthday: Date;
+
+  @ApiPropertyOptional({ description: '性别' })
+  readonly gender: UserGender;
+
+  @ApiPropertyOptional({ description: '职位' })
+  readonly profession: string;
 }
 
 // 列表
@@ -67,29 +92,4 @@ export class UserListParamsDto extends PaginationDto {
   @IsOptional()
   @IsString()
   readonly nickname: string;
-}
-
-export class UpdateFollowDto {
-  @ApiPropertyOptional({ description: '首页背景图' })
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  readonly homeUrl: string;
-
-  @ApiPropertyOptional({ description: '开始日期' })
-  @IsOptional()
-  @IsDate()
-  @IsNotEmpty()
-  readonly startDate: Date;
-}
-
-export class FollowVo extends CommonVO {
-  @ApiPropertyOptional({ description: '首页背景图' })
-  readonly homeUrl: string;
-
-  @ApiPropertyOptional({ description: '开始日期' })
-  readonly startDate: Date;
-
-  @ApiPropertyOptional({ description: '用户组' })
-  readonly users: UserVO[];
 }

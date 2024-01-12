@@ -10,7 +10,11 @@ import { ArticleModule } from './modules/article/article.module';
 import { CategoryModule } from './modules/category/category.module';
 import { TagModule } from './modules/tag/tag.module';
 import { MemorialDayModule } from './modules/memorial_day/memorial_day.module';
-import { MapRecordModule } from './modules/map_record/map_record.module';
+import { AddressModule } from './modules/address/address.module';
+import { CartModule } from './modules/cart/cart.module';
+import { SkuModule } from './modules/sku/sku.module';
+import { ProductModule } from './modules/product/product.module';
+import { SpecificationModule } from './modules/specification/specification.module';
 import envConfig from '../config/env';
 
 @Module({
@@ -42,7 +46,11 @@ import envConfig from '../config/env';
     CategoryModule,
     TagModule,
     MemorialDayModule,
-    MapRecordModule,
+    AddressModule,
+    CartModule,
+    SkuModule,
+    ProductModule,
+    SpecificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
