@@ -1,8 +1,8 @@
 export class Cart {}
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
-import { UserEntity } from '@/user/entities/user.entity';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
+import { MemberEntity } from '@/modules/member/entities/member.entity';
 
 @Entity('cart')
 export class CartEntity extends CommonEntity {
@@ -19,6 +19,6 @@ export class CartEntity extends CommonEntity {
   sku: SkuEntity;
 
   /** 多对一user */
-  @ManyToOne(() => UserEntity, (entity) => entity.carts)
-  user: UserEntity;
+  @ManyToOne(() => MemberEntity, (entity) => entity.carts)
+  member: MemberEntity;
 }

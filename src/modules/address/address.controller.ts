@@ -25,10 +25,10 @@ export class AddressController {
   @ApiOperation({ summary: '创建' })
   @Post('create')
   create(
-    @Body() createUserDto: CreateAddressDto,
-    @GetUser('id') userId: number,
+    @Body() data: CreateAddressDto,
+    @GetUser('memberId') memberId: number,
   ) {
-    return this.addressService.create(createUserDto, userId);
+    return this.addressService.create(data, memberId);
   }
 
   @ApiOperation({ summary: '分页列表' })
@@ -36,9 +36,9 @@ export class AddressController {
   @Get('list')
   async findAll(
     @Query() params: AddressListParamsDto,
-    @GetUser('id') userId: number,
+    @GetUser('memberId') memberId: number,
   ) {
-    return await this.addressService.findAll(params, userId);
+    return await this.addressService.findAll(params, memberId);
   }
 
   @ApiOperation({ summary: '详情' })

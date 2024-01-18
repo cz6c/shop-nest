@@ -23,8 +23,8 @@ export class SpecificationController {
 
   @ApiOperation({ summary: '创建' })
   @Post('create')
-  create(@Body() createUserDto: CreateSpecificationDto) {
-    return this.specificationService.create(createUserDto);
+  create(@Body() data: CreateSpecificationDto) {
+    return this.specificationService.create(data);
   }
 
   @ApiOperation({ summary: '分页列表' })

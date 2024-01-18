@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
-import { UserEntity } from '@/user/entities/user.entity';
+import { MemberEntity } from '@/modules/member/entities/member.entity';
 
 @Entity('address')
 export class AddressEntity extends CommonEntity {
@@ -33,6 +33,6 @@ export class AddressEntity extends CommonEntity {
   isDefault: boolean;
 
   /** 多对一user */
-  @ManyToOne(() => UserEntity, (entity) => entity.addresss)
-  user: UserEntity;
+  @ManyToOne(() => MemberEntity, (entity) => entity.addresss)
+  member: MemberEntity;
 }

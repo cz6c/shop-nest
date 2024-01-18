@@ -24,8 +24,8 @@ export class CartController {
 
   @ApiOperation({ summary: '创建' })
   @Post('create')
-  create(@Body() createUserDto: CreateCartDto, @GetUser('id') userId: number) {
-    return this.cartService.create(createUserDto, userId);
+  create(@Body() data: CreateCartDto, @GetUser('memberId') memberId: number) {
+    return this.cartService.create(data, memberId);
   }
 
   @ApiOperation({ summary: '分页列表' })
@@ -33,9 +33,9 @@ export class CartController {
   @Get('list')
   async findAll(
     @Query() params: CartListParamsDto,
-    @GetUser('id') userId: number,
+    @GetUser('memberId') memberId: number,
   ) {
-    return await this.cartService.findAll(params, userId);
+    return await this.cartService.findAll(params, memberId);
   }
 
   @ApiOperation({ summary: '详情' })

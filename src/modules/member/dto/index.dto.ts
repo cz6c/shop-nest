@@ -14,7 +14,7 @@ import {
 import { PaginationDto, PaginationVO, CommonVO } from '@/common/common.dto';
 import { Gender } from '@/common/common.enum';
 
-export class CreateUserDto {
+export class CreateMemberDto {
   @ApiProperty({ description: '用户名' })
   @IsString()
   @IsNotEmpty()
@@ -26,7 +26,7 @@ export class CreateUserDto {
   readonly password: string;
 }
 
-export class UpdateUserDto extends OmitType(PartialType(CreateUserDto), [
+export class UpdateMemberDto extends OmitType(PartialType(CreateMemberDto), [
   'username',
 ] as const) {
   @ApiPropertyOptional({ description: '头像' })
@@ -60,7 +60,7 @@ export class UpdateUserDto extends OmitType(PartialType(CreateUserDto), [
   readonly profession: string;
 }
 
-export class UserVO extends CommonVO {
+export class MemberVO extends CommonVO {
   @ApiPropertyOptional({ description: '账号' })
   readonly username: string;
 
@@ -81,13 +81,13 @@ export class UserVO extends CommonVO {
 }
 
 // 列表
-export class UserListVO extends PaginationVO {
-  @ApiPropertyOptional({ type: [UserVO], description: '列表' })
-  readonly list: UserVO[];
+export class MemberListVO extends PaginationVO {
+  @ApiPropertyOptional({ type: [MemberVO], description: '列表' })
+  readonly list: MemberVO[];
 }
 
 // 列表查询
-export class UserListParamsDto extends PaginationDto {
+export class MemberListParamsDto extends PaginationDto {
   @ApiPropertyOptional({ description: '昵称' })
   @IsOptional()
   @IsString()

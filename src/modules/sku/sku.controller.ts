@@ -23,8 +23,8 @@ export class SkuController {
 
   @ApiOperation({ summary: '创建' })
   @Post('create')
-  create(@Body() createUserDto: CreateSkuDto) {
-    return this.skuService.create(createUserDto);
+  create(@Body() data: CreateSkuDto) {
+    return this.skuService.create(data);
   }
 
   @ApiOperation({ summary: '分页列表' })

@@ -18,20 +18,23 @@ export class CartService {
   ) {}
 
   // 创建
-  async create(data: CreateCartDto, userId: number) {
+  async create(data: CreateCartDto, memberId: number) {
     const newItem = this.cartRepository.create({
       ...data,
-      user: { id: userId },
+      member: { id: memberId },
     });
     return await this.cartRepository.save(newItem);
   }
 
   // 分页列表
-  async findAll(query: CartListParamsDto, userId: number): Promise<CartListVO> {
+  async findAll(
+    query: CartListParamsDto,
+    memberId: number,
+  ): Promise<CartListVO> {
     const { page, limit } = query;
     const where: Record<string, any> = {
       isDelete: false,
-      user: { id: userId },
+      menubar: { id: memberId },
     };
     const skip = (page && limit && (page - 1) * limit) ?? 0;
     const take = limit ?? 0;

@@ -14,7 +14,7 @@ import {
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 
-@ApiTags('文章分类管理')
+@ApiTags('商品分类管理')
 @ApiBearerAuth()
 @Controller('category')
 export class CategoryController {

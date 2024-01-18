@@ -1,10 +1,12 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
 import { QINIU } from '#/index';
 import { Gender } from '@/common/common.enum';
+import { AddressEntity } from '@/modules/address/entities/address.entity';
+import { CartEntity } from '@/modules/cart/entities/cart.entity';
 
-@Entity('user')
-export class UserEntity extends CommonEntity {
+@Entity('member')
+export class MemberEntity extends CommonEntity {
   @Column({ nullable: true })
   username: string;
 
@@ -41,4 +43,12 @@ export class UserEntity extends CommonEntity {
   /** 职位 */
   @Column({ default: '' })
   profession: string;
+
+  /** 一对多地址 */
+  @OneToMany(() => AddressEntity, (entity) => entity.member)
+  addresss: AddressEntity[];
+
+  /** 一对多购物车 */
+  @OneToMany(() => CartEntity, (entity) => entity.member)
+  carts: CartEntity[];
 }

@@ -23,8 +23,8 @@ export class ProductController {
 
   @ApiOperation({ summary: '创建' })
   @Post('create')
-  create(@Body() createUserDto: CreateProductDto) {
-    return this.productService.create(createUserDto);
+  create(@Body() data: CreateProductDto) {
+    return this.productService.create(data);
   }
 
   @ApiOperation({ summary: '分页列表' })

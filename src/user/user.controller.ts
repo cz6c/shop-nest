@@ -26,8 +26,8 @@ export class UserController {
   @Public()
   @ApiOperation({ summary: '创建' })
   @Post('register')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  create(@Body() data: CreateUserDto) {
+    return this.userService.create(data);
   }
 
   @ApiOperation({ summary: '列表' })
@@ -40,13 +40,13 @@ export class UserController {
   @ApiOperation({ summary: '详情' })
   @ApiOkResponse({ type: UserVO })
   @Get('info')
-  async findOne(@GetUser('id') userId: number) {
+  async findOne(@GetUser('userId') userId: number) {
     return await this.userService.findOne(userId);
   }
 
   @ApiOperation({ summary: '更新' })
   @Post('update')
-  async update(@Body() data: UpdateUserDto, @GetUser('id') userId: number) {
+  async update(@Body() data: UpdateUserDto, @GetUser('userId') userId: number) {
     return await this.userService.update(data, userId);
   }
 

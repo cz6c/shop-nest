@@ -18,10 +18,10 @@ export class AddressService {
   ) {}
 
   // 创建
-  async create(data: CreateAddressDto, userId: number) {
+  async create(data: CreateAddressDto, memberId: number) {
     const newItem = this.addressRepository.create({
       ...data,
-      user: { id: userId },
+      member: { id: memberId },
     });
     return await this.addressRepository.save(newItem);
   }
@@ -29,12 +29,12 @@ export class AddressService {
   // 分页列表
   async findAll(
     query: AddressListParamsDto,
-    userId: number,
+    memberId: number,
   ): Promise<AddressListVO> {
     const { page, limit } = query;
     const where: Record<string, any> = {
       isDelete: false,
-      user: { id: userId },
+      member: { id: memberId },
     };
     const skip = (page && limit && (page - 1) * limit) ?? 0;
     const take = limit ?? 0;

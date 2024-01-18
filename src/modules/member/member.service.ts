@@ -1,37 +1,37 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
+import { MemberEntity } from './entities/member.entity';
 import {
-  CreateUserDto,
-  UpdateUserDto,
-  UserVO,
-  UserListVO,
-  UserListParamsDto,
+  CreateMemberDto,
+  UpdateMemberDto,
+  MemberVO,
+  MemberListVO,
+  MemberListParamsDto,
 } from './dto/index.dto';
 
 @Injectable()
-export class UserService {
+export class MemberService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(MemberEntity)
+    private readonly memberRepository: Repository<MemberEntity>,
   ) {}
 
   // 创建
-  async create(data: CreateUserDto) {
+  async create(data: CreateMemberDto) {
     const { username } = data;
-    const item = await this.userRepository.findOne({
+    const item = await this.memberRepository.findOne({
       where: { username, isDelete: false },
     });
     if (item) {
       throw new HttpException(`${username}已存在`, 200);
     }
-    const newItem = this.userRepository.create(data);
-    return await this.userRepository.save(newItem);
+    const newItem = this.memberRepository.create(data);
+    return await this.memberRepository.save(newItem);
   }
 
   // 列表
-  async findAll(query: UserListParamsDto): Promise<UserListVO> {
+  async findAll(query: MemberListParamsDto): Promise<MemberListVO> {
     const { nickname, page, limit } = query;
     const where: Record<string, any> = { isDelete: false };
     if (nickname) {
@@ -39,7 +39,7 @@ export class UserService {
     }
     const skip = (page && limit && (page - 1) * limit) ?? 0;
     const take = limit ?? 0;
-    const [list, total] = await this.userRepository.findAndCount({
+    const [list, total] = await this.memberRepository.findAndCount({
       where,
       order: { updateTime: 'DESC' },
       skip,
@@ -49,8 +49,8 @@ export class UserService {
   }
 
   // 详情
-  async findOne(id: number): Promise<UserVO> {
-    const item = await this.userRepository.findOne({
+  async findOne(id: number): Promise<MemberVO> {
+    const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
@@ -60,37 +60,37 @@ export class UserService {
   }
 
   // 更新
-  async update(data: UpdateUserDto, id: number) {
-    const item = await this.userRepository.findOne({
+  async update(data: UpdateMemberDto, id: number) {
+    const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
-    const updateItem = this.userRepository.merge(item, data);
-    return this.userRepository.save(updateItem);
+    const updateItem = this.memberRepository.merge(item, data);
+    return this.memberRepository.save(updateItem);
   }
 
   // 刪除
   async remove(id: number) {
-    const item = await this.userRepository.findOne({
+    const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
       throw new HttpException(`id为${id}的数据不存在`, 400);
     }
-    // return await this.userRepository.remove(item);
+    // return await this.memberRepository.remove(item);
     item.isDelete = true;
-    return this.userRepository.save(item);
+    return this.memberRepository.save(item);
   }
 
   // 通过账号查询密码
-  async findByUsername(username: string) {
-    const user = await this.userRepository.findOne({
+  async findByMembername(username: string) {
+    const member = await this.memberRepository.findOne({
       where: { username, isDelete: false },
       select: ['password', 'id'],
     });
-    if (!user) {
+    if (!member) {
       throw new HttpException('用户名不正确！', 400);
     }
-    const { password, id } = user;
+    const { password, id } = member;
     return { username, password, id };
   }
 }

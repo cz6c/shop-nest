@@ -12,8 +12,8 @@ export class LoginDto {
 }
 
 // token payload
-export class UserDto {
-  readonly id: number;
+export class UserPayload {
+  readonly userId: number; //用户id
   readonly username: string;
-  readonly followId: number;
+  readonly memberId: number; //会员id
 }
