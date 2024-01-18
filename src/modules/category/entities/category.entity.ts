@@ -1,15 +1,18 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
-import { ArticleEntity } from '@/modules/article/entities/article.entity';
+import { ProductEntity } from '@/modules/product/entities/product.entity';
 
 @Entity('category')
 export class CategoryEntity extends CommonEntity {
-  @Column({ nullable: true })
+  /** 分类名称 */
+  @Column({ default: '' })
   name: string;
 
+  /** 父级分类id */
   @Column({ nullable: true })
   parentId: number;
 
-  @OneToMany(() => ArticleEntity, (article) => article.category)
-  articles: ArticleEntity[];
+  /** 一对多商品 */
+  @OneToMany(() => ProductEntity, (entity) => entity.category)
+  products: ProductEntity[];
 }

@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -19,17 +19,17 @@ export class CreateAddressDto {
   @IsNotEmpty()
   readonly contact: string;
 
-  @ApiProperty({ description: '省对应的 code' })
+  @ApiProperty({ description: '省code' })
   @IsString()
   @IsNotEmpty()
   readonly provinceCode: string;
 
-  @ApiProperty({ description: '市对应的 code' })
+  @ApiProperty({ description: '市code' })
   @IsString()
   @IsNotEmpty()
   readonly cityCode: string;
 
-  @ApiProperty({ description: '区/县对应的 code' })
+  @ApiProperty({ description: '区/县code' })
   @IsString()
   @IsNotEmpty()
   readonly countyCode: string;
@@ -82,9 +82,4 @@ export class AddressListVO extends PaginationVO {
 }
 
 // 列表查询
-export class AddressListParamsDto extends PaginationDto {
-  @ApiPropertyOptional({ description: '收货人姓名' })
-  @IsOptional()
-  @IsString()
-  readonly receiver: string;
-}
+export class AddressListParamsDto extends PaginationDto {}

@@ -1,36 +1,33 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AddressEntity } from './entities/address.entity';
+import { CartEntity } from './entities/cart.entity';
 import {
-  CreateAddressDto,
-  UpdateAddressDto,
-  AddressVO,
-  AddressListParamsDto,
-  AddressListVO,
+  CreateCartDto,
+  UpdateCartDto,
+  CartVO,
+  CartListParamsDto,
+  CartListVO,
 } from './dto/index.dto';
 
 @Injectable()
-export class AddressService {
+export class CartService {
   constructor(
-    @InjectRepository(AddressEntity)
-    private readonly addressRepository: Repository<AddressEntity>,
+    @InjectRepository(CartEntity)
+    private readonly cartRepository: Repository<CartEntity>,
   ) {}
 
   // 创建
-  async create(data: CreateAddressDto, userId: number) {
-    const newItem = this.addressRepository.create({
+  async create(data: CreateCartDto, userId: number) {
+    const newItem = this.cartRepository.create({
       ...data,
       user: { id: userId },
     });
-    return await this.addressRepository.save(newItem);
+    return await this.cartRepository.save(newItem);
   }
 
   // 分页列表
-  async findAll(
-    query: AddressListParamsDto,
-    userId: number,
-  ): Promise<AddressListVO> {
+  async findAll(query: CartListParamsDto, userId: number): Promise<CartListVO> {
     const { page, limit } = query;
     const where: Record<string, any> = {
       isDelete: false,
@@ -38,7 +35,7 @@ export class AddressService {
     };
     const skip = (page && limit && (page - 1) * limit) ?? 0;
     const take = limit ?? 0;
-    const [list, total] = await this.addressRepository.findAndCount({
+    const [list, total] = await this.cartRepository.findAndCount({
       where,
       order: { updateTime: 'DESC' },
       skip,
@@ -48,8 +45,8 @@ export class AddressService {
   }
 
   // 详情
-  async findOne(id: number): Promise<AddressVO> {
-    const item = await this.addressRepository.findOne({
+  async findOne(id: number): Promise<CartVO> {
+    const item = await this.cartRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
@@ -59,25 +56,25 @@ export class AddressService {
   }
 
   // 更新
-  async update(data: UpdateAddressDto) {
+  async update(data: UpdateCartDto) {
     const { id } = data;
-    const item = await this.addressRepository.findOne({
+    const item = await this.cartRepository.findOne({
       where: { id, isDelete: false },
     });
-    const updateItem = this.addressRepository.merge(item, data);
-    return this.addressRepository.save(updateItem);
+    const updateItem = this.cartRepository.merge(item, data);
+    return this.cartRepository.save(updateItem);
   }
 
   // 刪除
   async remove(id: number) {
-    const item = await this.addressRepository.findOne({
+    const item = await this.cartRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
       throw new HttpException(`id为${id}的数据不存在`, 400);
     }
-    // return await this.addressRepository.remove(item);
+    // return await this.cartRepository.remove(item);
     item.isDelete = true;
-    return this.addressRepository.save(item);
+    return this.cartRepository.save(item);
   }
 }

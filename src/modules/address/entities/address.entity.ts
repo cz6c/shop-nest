@@ -4,27 +4,35 @@ import { UserEntity } from '@/user/entities/user.entity';
 
 @Entity('address')
 export class AddressEntity extends CommonEntity {
-  @Column({ nullable: true })
+  /** 收货人姓名 */
+  @Column({ default: '' })
   receiver: string;
 
-  @Column({ nullable: true })
+  /** 收货人联系方式 */
+  @Column({ default: '' })
   contact: string;
 
-  @Column({ nullable: true })
+  /** 省code */
+  @Column({ default: '' })
   provinceCode: string;
 
-  @Column({ nullable: true })
+  /** 市code */
+  @Column({ default: '' })
   cityCode: string;
 
-  @Column({ nullable: true })
+  /** 区/县code */
+  @Column({ default: '' })
   countyCode: string;
 
-  @Column({ nullable: true })
+  /** 收货人详细地址 */
+  @Column({ default: '' })
   address: string;
 
+  /** 是否设置为默认地址 */
   @Column({ default: false })
   isDefault: boolean;
 
-  @ManyToOne(() => UserEntity, (entity) => entity.address)
+  /** 多对一user */
+  @ManyToOne(() => UserEntity, (entity) => entity.addresss)
   user: UserEntity;
 }

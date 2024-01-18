@@ -6,10 +6,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
-import { ArticleModule } from './modules/article/article.module';
 import { CategoryModule } from './modules/category/category.module';
-import { TagModule } from './modules/tag/tag.module';
-import { MemorialDayModule } from './modules/memorial_day/memorial_day.module';
 import { AddressModule } from './modules/address/address.module';
 import { CartModule } from './modules/cart/cart.module';
 import { SkuModule } from './modules/sku/sku.module';
@@ -42,10 +39,7 @@ import envConfig from '../config/env';
     UserModule,
     AuthModule,
     UploadModule,
-    ArticleModule,
     CategoryModule,
-    TagModule,
-    MemorialDayModule,
     AddressModule,
     CartModule,
     SkuModule,

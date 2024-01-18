@@ -13,7 +13,7 @@ export class UserEntity extends CommonEntity {
   @Column({ select: false })
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ default: '' })
   nickname: string;
 
   @Column({
@@ -32,6 +32,7 @@ export class UserEntity extends CommonEntity {
   @Column({ type: 'timestamp', nullable: true })
   birthday: Date;
 
+  /** 性别 */
   @Column({
     type: 'enum',
     enum: UserGender,
@@ -39,12 +40,15 @@ export class UserEntity extends CommonEntity {
   })
   gender: UserGender;
 
-  @Column({ nullable: true })
+  /** 职位 */
+  @Column({ default: '' })
   profession: string;
 
+  /** 一对多地址 */
   @OneToMany(() => AddressEntity, (entity) => entity.user)
-  address: AddressEntity[];
+  addresss: AddressEntity[];
 
+  /** 一对多购物车 */
   @OneToMany(() => CartEntity, (entity) => entity.user)
-  cart: CartEntity[];
+  carts: CartEntity[];
 }
