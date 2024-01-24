@@ -8,5 +8,6 @@ import { SkuEntity } from './entities/sku.entity';
   imports: [TypeOrmModule.forFeature([SkuEntity])],
   controllers: [SkuController],
   providers: [SkuService],
+  exports: [SkuService],
 })
 export class SkuModule {}

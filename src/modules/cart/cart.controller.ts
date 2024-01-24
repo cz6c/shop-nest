@@ -18,7 +18,7 @@ import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('购物车管理')
 @ApiBearerAuth()
-@Controller('Cart')
+@Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 

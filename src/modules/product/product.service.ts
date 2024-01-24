@@ -9,17 +9,36 @@ import {
   ProductListParamsDto,
   ProductListVO,
 } from './dto/index.dto';
+import { SkuService } from '../sku/sku.service';
+import { SpecificationService } from '../specification/specification.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+    private readonly skuService: SkuService,
+    private readonly specificationService: SpecificationService,
   ) {}
 
   // 创建
   async create(data: CreateProductDto) {
-    const newItem = this.productRepository.create(data);
+    const { skus, specs } = data;
+    console.log(data);
+    const skuList = await Promise.all(
+      skus.map((c) => this.skuService.create(c)),
+    );
+    const specList = await Promise.all(
+      specs.map((c) => this.specificationService.create(c)),
+    );
+    console.log(skuList, '--skuList');
+    console.log(specList, '--specList');
+    const newItem = this.productRepository.create({
+      ...data,
+      skus: skuList,
+      specs: specList,
+    });
+    console.log(newItem, '--newItem');
     return await this.productRepository.save(newItem);
   }
 

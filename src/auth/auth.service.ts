@@ -1,16 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, UserPayload } from './dto/auth.dto';
-import { MemberEntity } from '@/modules/member/entities/member.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MemberService } from '@/modules/member/member.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(MemberEntity)
-    private readonly memberRepository: Repository<MemberEntity>,
+    private readonly memberService: MemberService,
   ) {}
 
   async login(user: UserPayload) {
@@ -21,13 +18,7 @@ export class AuthService {
   }
 
   async memberLogin({ username, password }: LoginDto) {
-    const member = await this.memberRepository.findOne({
-      where: { username, isDelete: false },
-      select: ['username', 'password', 'id'],
-    });
-    if (!member) {
-      throw new HttpException('用户名不正确！', 400);
-    }
+    const member = await this.memberService.findByMembername(username);
 
     console.log('member', member);
 

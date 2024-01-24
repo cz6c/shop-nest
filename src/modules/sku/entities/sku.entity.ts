@@ -13,6 +13,10 @@ export class SkuEntity extends CommonEntity {
   @Column({ default: 0 })
   inventory: number;
 
+  /** 成本价 */
+  @Column({ default: 0 })
+  costPrice: number;
+
   /** 当前价格 */
   @Column({ default: 0 })
   price: number;

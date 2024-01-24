@@ -29,10 +29,10 @@ export class CategoryService {
     const parent = await this.categoryRepository.findOne({
       where: { id: parentId, isDelete: false },
     });
-    if (!parent) {
-      throw new HttpException(`${parentId}实体不存在`, 200);
-    }
-    const newItem = this.categoryRepository.create(data);
+    const newItem = this.categoryRepository.create({
+      ...data,
+      parentId: parent ? parentId : null,
+    });
     return await this.categoryRepository.save(newItem);
   }
 

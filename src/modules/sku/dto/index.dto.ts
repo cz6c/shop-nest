@@ -17,6 +17,10 @@ export class CreateSkuDto {
   @IsNumber()
   readonly inventory: number;
 
+  @ApiProperty({ description: '成本价' })
+  @IsNumber()
+  readonly costPrice: number;
+
   @ApiProperty({ description: '当前价格' })
   @IsNumber()
   readonly price: number;
@@ -44,6 +48,9 @@ export class SkuVO extends CommonVO {
 
   @ApiPropertyOptional({ description: '库存' })
   readonly inventory: number;
+
+  @ApiPropertyOptional({ description: '成本价' })
+  readonly costPrice: number;
 
   @ApiPropertyOptional({ description: '当前价格' })
   readonly price: number;

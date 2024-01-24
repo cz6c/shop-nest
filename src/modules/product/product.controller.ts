@@ -17,7 +17,7 @@ import { IdDto } from '@/common/common.dto';
 
 @ApiTags('商品管理')
 @ApiBearerAuth()
-@Controller('Product')
+@Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

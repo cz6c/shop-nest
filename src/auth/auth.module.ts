@@ -9,8 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MemberEntity } from '@/modules/member/entities/member.entity';
+import { MemberModule } from '@/modules/member/member.module';
 
 const AuthJwtModule = JwtModule.registerAsync({
   inject: [ConfigService],
@@ -23,12 +22,7 @@ const AuthJwtModule = JwtModule.registerAsync({
 });
 
 @Module({
-  imports: [
-    UserModule,
-    TypeOrmModule.forFeature([MemberEntity]),
-    PassportModule,
-    AuthJwtModule,
-  ],
+  imports: [UserModule, MemberModule, PassportModule, AuthJwtModule],
   providers: [
     AuthService,
     LocalStrategy,
