@@ -5,7 +5,6 @@ import { CategoryEntity } from './entities/category.entity';
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
-  CategoryVO,
   CategoryListParamsDto,
 } from './dto/index.dto';
 import { listToTree } from '@/utils/tree';
@@ -53,7 +52,7 @@ export class CategoryService {
   }
 
   // 详情
-  async findOne(id: number): Promise<CategoryVO> {
+  async findOne(id: number) {
     const item = await this.categoryRepository.findOne({
       where: { id, isDelete: false },
     });

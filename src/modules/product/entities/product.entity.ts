@@ -49,12 +49,16 @@ export class ProductEntity extends CommonEntity {
   })
   pictures: string[];
 
+  /** 商品状态 */
+  @Column({ default: false })
+  status: boolean;
+
   /** 一对多sku */
   @OneToMany(() => SkuEntity, (entity) => entity.product)
   skus: SkuEntity[];
 
   /** 多对多规格 */
-  @OneToMany(() => SpecificationEntity, (entity) => entity.product)
+  @OneToMany(() => SpecificationEntity, (entity) => entity.products)
   specs: SpecificationEntity[];
 
   /** 多对一分类 */

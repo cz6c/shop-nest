@@ -18,5 +18,5 @@ export class SpecificationEntity extends CommonEntity {
   /** 多对多商品 */
   @ManyToMany(() => ProductEntity, (product) => product.specs)
   @JoinTable()
-  product: ProductEntity[];
+  products: ProductEntity[];
 }

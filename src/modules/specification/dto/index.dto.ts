@@ -6,6 +6,7 @@ import {
 } from '@nestjs/swagger';
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
+import { ProductEntity } from '@/modules/product/entities/product.entity';
 
 // 新增
 export class CreateSpecificationDto {
@@ -18,6 +19,10 @@ export class CreateSpecificationDto {
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   readonly options: string[];
+
+  @ApiProperty({ description: '关联商品' })
+  @IsOptional()
+  readonly products: ProductEntity[];
 }
 
 // 更新

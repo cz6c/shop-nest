@@ -6,6 +6,7 @@ import {
 } from '@nestjs/swagger';
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
+import { ProductEntity } from '@/modules/product/entities/product.entity';
 
 // 新增
 export class CreateSkuDto {
@@ -36,6 +37,10 @@ export class CreateSkuDto {
   @ApiProperty({ description: '规格集合[ 规格信息 ]' })
   @IsString()
   readonly specs: string;
+
+  @ApiProperty({ description: '关联商品' })
+  @IsOptional()
+  readonly product: ProductEntity;
 }
 
 // 更新

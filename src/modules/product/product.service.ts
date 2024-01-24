@@ -11,6 +11,7 @@ import {
 } from './dto/index.dto';
 import { SkuService } from '../sku/sku.service';
 import { SpecificationService } from '../specification/specification.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class ProductService {
@@ -19,27 +20,25 @@ export class ProductService {
     private readonly productRepository: Repository<ProductEntity>,
     private readonly skuService: SkuService,
     private readonly specificationService: SpecificationService,
+    private readonly categoryService: CategoryService,
   ) {}
 
   // 创建
   async create(data: CreateProductDto) {
-    const { skus, specs } = data;
-    console.log(data);
-    const skuList = await Promise.all(
-      skus.map((c) => this.skuService.create(c)),
-    );
-    const specList = await Promise.all(
-      specs.map((c) => this.specificationService.create(c)),
-    );
-    console.log(skuList, '--skuList');
-    console.log(specList, '--specList');
-    const newItem = this.productRepository.create({
-      ...data,
-      skus: skuList,
-      specs: specList,
-    });
+    const { skus, specs, categoryId } = data;
+    const newItem = this.productRepository.create(data);
     console.log(newItem, '--newItem');
-    return await this.productRepository.save(newItem);
+    newItem.category = await this.categoryService.findOne(categoryId);
+    const product = await this.productRepository.save(newItem);
+    await Promise.all(
+      specs.map((spec) =>
+        this.specificationService.create({ ...spec, products: [product] }),
+      ),
+    );
+    await Promise.all(
+      skus.map((sku) => this.skuService.create({ ...sku, product })),
+    );
+    return product;
   }
 
   // 分页列表

@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -21,6 +22,10 @@ export class CreateProductDto {
   @IsString()
   readonly name: string;
 
+  @ApiProperty({ description: '商品分类' })
+  @IsNumber()
+  readonly categoryId: number;
+
   @ApiProperty({ description: '商品描述' })
   @IsString()
   readonly desc: string;
@@ -28,6 +33,10 @@ export class CreateProductDto {
   @ApiProperty({ description: '当前价格' })
   @IsNumber()
   readonly price: number;
+
+  @ApiProperty({ description: '商品状态' })
+  @IsBoolean()
+  readonly status: boolean;
 
   @ApiProperty({ description: '主图图片集合[ 主图图片链接 ]' })
   @IsArray()
