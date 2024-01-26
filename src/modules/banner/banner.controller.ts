@@ -15,7 +15,7 @@ import {
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 
-@ApiTags('l管理')
+@ApiTags('轮播图管理')
 @ApiBearerAuth()
 @Controller('banner')
 export class BannerController {

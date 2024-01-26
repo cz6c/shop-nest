@@ -9,11 +9,10 @@ import { CartService } from './cart.service';
 import {
   CreateCartDto,
   UpdateCartDto,
-  CartVO,
   CartListVO,
   CartListParamsDto,
 } from './dto/index.dto';
-import { IdDto } from '@/common/common.dto';
+import { IdsDto } from '@/common/common.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('购物车管理')
@@ -22,13 +21,13 @@ import { GetUser } from '@/decorator/getUser.decorator';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @ApiOperation({ summary: '创建' })
+  @ApiOperation({ summary: '加入购物车' })
   @Post('create')
   create(@Body() data: CreateCartDto, @GetUser('memberId') memberId: number) {
     return this.cartService.create(data, memberId);
   }
 
-  @ApiOperation({ summary: '分页列表' })
+  @ApiOperation({ summary: '购物车列表' })
   @ApiOkResponse({ type: CartListVO })
   @Get('list')
   async findAll(
@@ -38,22 +37,15 @@ export class CartController {
     return await this.cartService.findAll(params, memberId);
   }
 
-  @ApiOperation({ summary: '详情' })
-  @ApiOkResponse({ type: CartVO })
-  @Get('info')
-  async findOne(@Query() params: IdDto) {
-    return await this.cartService.findOne(params.id);
-  }
-
-  @ApiOperation({ summary: '更新' })
+  @ApiOperation({ summary: '更新购物车单品' })
   @Post('update')
   async update(@Body() data: UpdateCartDto) {
     return await this.cartService.update(data);
   }
 
-  @ApiOperation({ summary: '删除' })
+  @ApiOperation({ summary: '删除/清空购物车单品' })
   @Post('delete')
-  async remove(@Body() data: IdDto) {
-    return await this.cartService.remove(data.id);
+  async delete(@Body() data: IdsDto) {
+    return await this.cartService.delete(data.ids);
   }
 }

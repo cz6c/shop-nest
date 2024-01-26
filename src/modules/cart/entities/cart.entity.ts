@@ -1,4 +1,3 @@
-export class Cart {}
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
@@ -13,6 +12,10 @@ export class CartEntity extends CommonEntity {
   /** 是否选中 */
   @Column({ default: false })
   selected: boolean;
+
+  /** 加入购物车价格 */
+  @Column({ default: 0 })
+  price: number;
 
   /** 多对一sku */
   @ManyToOne(() => SkuEntity, (entity) => entity.carts)

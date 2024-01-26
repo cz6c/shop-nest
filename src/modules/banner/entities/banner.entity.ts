@@ -1,9 +1,6 @@
-import { Entity, Column, OneToMany, ManyToOne, ManyToMany } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
-import { SkuEntity } from '@/modules/sku/entities/sku.entity';
-import { SpecificationEntity } from '@/modules/specification/entities/specification.entity';
 import { QINIU } from '#/index';
-import { CategoryEntity } from '@/modules/category/entities/category.entity';
 
 @Entity('banner')
 export class BannerEntity extends CommonEntity {

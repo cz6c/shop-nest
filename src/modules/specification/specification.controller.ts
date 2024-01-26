@@ -15,7 +15,7 @@ import {
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 
-@ApiTags('商品规格管理')
+@ApiTags('规格模版管理')
 @ApiBearerAuth()
 @Controller('specification')
 export class SpecificationController {

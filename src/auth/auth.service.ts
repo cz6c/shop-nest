@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto, UserPayload } from './dto/auth.dto';
+import { LoginDto, UserPayload, wxLoginDto } from './dto/auth.dto';
 import { MemberService } from '@/modules/member/member.service';
 
 @Injectable()
@@ -31,5 +31,9 @@ export class AuthService {
       userId: 0,
       memberId: member.id,
     });
+  }
+
+  async wxLogin(data: wxLoginDto) {
+    console.log(data);
   }
 }

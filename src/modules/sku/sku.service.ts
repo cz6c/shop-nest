@@ -5,7 +5,6 @@ import { SkuEntity } from './entities/sku.entity';
 import {
   CreateSkuDto,
   UpdateSkuDto,
-  SkuVO,
   SkuListParamsDto,
   SkuListVO,
 } from './dto/index.dto';
@@ -23,6 +22,11 @@ export class SkuService {
     return await this.skuRepository.save(newItem);
   }
 
+  async batchCreate(data: CreateSkuDto[]) {
+    const newItem = this.skuRepository.create(data);
+    return await this.skuRepository.save(newItem);
+  }
+
   // 分页列表
   async findAll(query: SkuListParamsDto): Promise<SkuListVO> {
     const { skuName, page, limit } = query;
@@ -36,6 +40,7 @@ export class SkuService {
     const take = limit ?? 0;
     const [list, total] = await this.skuRepository.findAndCount({
       where,
+      relations: ['product'],
       order: { updateTime: 'DESC' },
       skip,
       take,
@@ -44,12 +49,13 @@ export class SkuService {
   }
 
   // 详情
-  async findOne(id: number): Promise<SkuVO> {
+  async findOne(id: number) {
     const item = await this.skuRepository.findOne({
       where: { id, isDelete: false },
+      relations: ['product'],
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的sku数据不存在`, 200);
     }
     return item;
   }
@@ -70,7 +76,7 @@ export class SkuService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 400);
+      throw new HttpException(`id为${id}的sku数据不存在`, 400);
     }
     // return await this.skuRepository.remove(item);
     item.isDelete = true;

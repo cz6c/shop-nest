@@ -16,13 +16,13 @@ import {
 import { IdDto } from '@/common/common.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
 
-@ApiTags('地址管理')
+@ApiTags('收货地址管理')
 @ApiBearerAuth()
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
-  @ApiOperation({ summary: '创建' })
+  @ApiOperation({ summary: '添加收货地址' })
   @Post('create')
   create(
     @Body() data: CreateAddressDto,
@@ -31,7 +31,7 @@ export class AddressController {
     return this.addressService.create(data, memberId);
   }
 
-  @ApiOperation({ summary: '分页列表' })
+  @ApiOperation({ summary: '收货地址列表' })
   @ApiOkResponse({ type: AddressListVO })
   @Get('list')
   async findAll(
@@ -41,22 +41,34 @@ export class AddressController {
     return await this.addressService.findAll(params, memberId);
   }
 
-  @ApiOperation({ summary: '详情' })
+  @ApiOperation({ summary: '收货地址详情' })
   @ApiOkResponse({ type: AddressVO })
   @Get('info')
   async findOne(@Query() params: IdDto) {
     return await this.addressService.findOne(params.id);
   }
 
-  @ApiOperation({ summary: '更新' })
+  @ApiOperation({ summary: '更新收货地址' })
   @Post('update')
-  async update(@Body() data: UpdateAddressDto) {
-    return await this.addressService.update(data);
+  async update(
+    @Body() data: UpdateAddressDto,
+    @GetUser('memberId') memberId: number,
+  ) {
+    return await this.addressService.update(data, memberId);
   }
 
-  @ApiOperation({ summary: '删除' })
+  @ApiOperation({ summary: '删除收货地址' })
   @Post('delete')
   async remove(@Body() data: IdDto) {
     return await this.addressService.remove(data.id);
+  }
+
+  @ApiOperation({ summary: '设置默认' })
+  @Get('setDefault')
+  async setDefault(
+    @Query() params: IdDto,
+    @GetUser('memberId') memberId: number,
+  ) {
+    return await this.addressService.setDefault(params.id, memberId);
   }
 }

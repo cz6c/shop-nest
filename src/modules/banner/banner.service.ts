@@ -33,7 +33,7 @@ export class BannerService {
     const take = limit ?? 0;
     const [list, total] = await this.bannerRepository.findAndCount({
       where,
-      order: { updateTime: 'DESC', },
+      order: { updateTime: 'DESC', sortNum: 'DESC' },
       skip,
       take,
     });

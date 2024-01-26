@@ -9,24 +9,38 @@ import {
   AddressListParamsDto,
   AddressListVO,
 } from './dto/index.dto';
+import { MemberService } from '../member/member.service';
 
 @Injectable()
 export class AddressService {
   constructor(
     @InjectRepository(AddressEntity)
     private readonly addressRepository: Repository<AddressEntity>,
+    private readonly memberService: MemberService,
   ) {}
 
-  // 创建
+  // 添加收货地址
   async create(data: CreateAddressDto, memberId: number) {
-    const newItem = this.addressRepository.create({
-      ...data,
-      member: { id: memberId },
-    });
+    // 新增地址为默认时
+    if (data.isDefault) {
+      const list = await this.addressRepository.find({
+        where: {
+          isDelete: false,
+          isDefault: true,
+          member: { id: memberId },
+        },
+      });
+      if (list[0]) {
+        list[0].isDefault = false;
+        await this.addressRepository.save(list[0]);
+      }
+    }
+    const newItem = this.addressRepository.create(data);
+    newItem.member = await this.memberService.findOne(memberId);
     return await this.addressRepository.save(newItem);
   }
 
-  // 分页列表
+  // 收货地址列表
   async findAll(
     query: AddressListParamsDto,
     memberId: number,
@@ -40,44 +54,73 @@ export class AddressService {
     const take = limit ?? 0;
     const [list, total] = await this.addressRepository.findAndCount({
       where,
-      order: { updateTime: 'DESC' },
+      order: { updateTime: 'DESC', isDefault: 'DESC' },
       skip,
       take,
     });
     return { list, page, limit, total };
   }
 
-  // 详情
+  // 收货地址详情
   async findOne(id: number): Promise<AddressVO> {
     const item = await this.addressRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的address数据不存在`, 200);
     }
     return item;
   }
 
-  // 更新
-  async update(data: UpdateAddressDto) {
+  // 更新收货地址
+  async update(data: UpdateAddressDto, memberId: number) {
     const { id } = data;
+    // 更新地址为默认时
+    if (data.isDefault) {
+      const list = await this.addressRepository.find({
+        where: {
+          isDelete: false,
+          isDefault: true,
+          member: { id: memberId },
+        },
+      });
+      if (list[0]) {
+        list[0].isDefault = false;
+        await this.addressRepository.save(list[0]);
+      }
+    }
     const item = await this.addressRepository.findOne({
       where: { id, isDelete: false },
     });
     const updateItem = this.addressRepository.merge(item, data);
-    return this.addressRepository.save(updateItem);
+    return await this.addressRepository.save(updateItem);
   }
 
-  // 刪除
+  // 刪除收货地址
   async remove(id: number) {
     const item = await this.addressRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 400);
+      throw new HttpException(`id为${id}的address数据不存在`, 400);
     }
-    // return await this.addressRepository.remove(item);
     item.isDelete = true;
     return this.addressRepository.save(item);
+  }
+
+  // 设置默认收货地址
+  async setDefault(id: number, memberId: number) {
+    const list = await this.addressRepository.find({
+      where: {
+        isDelete: false,
+        isDefault: true,
+        member: { id: memberId },
+      },
+    });
+    if (list[0]) {
+      list[0].isDefault = false;
+      await this.addressRepository.save(list[0]);
+    }
+    return this.addressRepository.update(id, { isDefault: true });
   }
 }

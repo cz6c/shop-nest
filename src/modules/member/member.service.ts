@@ -5,7 +5,6 @@ import { MemberEntity } from './entities/member.entity';
 import {
   CreateMemberDto,
   UpdateMemberDto,
-  MemberVO,
   MemberListVO,
   MemberListParamsDto,
 } from './dto/index.dto';
@@ -49,12 +48,12 @@ export class MemberService {
   }
 
   // 详情
-  async findOne(id: number): Promise<MemberVO> {
+  async findOne(id: number) {
     const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的member数据不存在`, 200);
     }
     return item;
   }
@@ -64,6 +63,9 @@ export class MemberService {
     const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
+    if (!item) {
+      throw new HttpException(`id为${id}的member数据不存在`, 200);
+    }
     const updateItem = this.memberRepository.merge(item, data);
     return this.memberRepository.save(updateItem);
   }
@@ -74,7 +76,7 @@ export class MemberService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 400);
+      throw new HttpException(`id为${id}的member数据不存在`, 400);
     }
     // return await this.memberRepository.remove(item);
     item.isDelete = true;

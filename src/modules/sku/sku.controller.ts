@@ -7,7 +7,6 @@ import {
 } from '@nestjs/swagger';
 import { SkuService } from './sku.service';
 import {
-  CreateSkuDto,
   UpdateSkuDto,
   SkuVO,
   SkuListVO,
@@ -20,12 +19,6 @@ import { IdDto } from '@/common/common.dto';
 @Controller('sku')
 export class SkuController {
   constructor(private readonly skuService: SkuService) {}
-
-  @ApiOperation({ summary: '创建' })
-  @Post('create')
-  create(@Body() data: CreateSkuDto) {
-    return this.skuService.create(data);
-  }
 
   @ApiOperation({ summary: '分页列表' })
   @ApiOkResponse({ type: SkuListVO })

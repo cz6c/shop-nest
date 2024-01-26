@@ -14,13 +14,18 @@ import {
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
-import { SpecificationEntity } from '@/modules/specification/entities/specification.entity';
+import { SpecsEntity } from '@/modules/specs/entities/specs.entity';
 
 // 新增
 export class CreateProductDto {
   @ApiProperty({ description: '商品名称' })
   @IsString()
+  @IsNotEmpty()
   readonly name: string;
+
+  @ApiProperty({ description: '商品编码' })
+  @IsString()
+  readonly spuCode: string;
 
   @ApiProperty({ description: '商品分类' })
   @IsNumber()
@@ -56,7 +61,7 @@ export class CreateProductDto {
 
   @ApiProperty({ description: '规格集合[ 规格信息 ]' })
   @IsNotEmpty()
-  readonly specs: SpecificationEntity[];
+  readonly specs: SpecsEntity[];
 }
 
 // 更新
@@ -69,6 +74,9 @@ export class UpdateProductDto extends IntersectionType(
 export class ProductVO extends CommonVO {
   @ApiPropertyOptional({ description: '商品名称' })
   readonly name: string;
+
+  @ApiPropertyOptional({ description: '商品编码' })
+  readonly spuCode: string;
 
   @ApiPropertyOptional({ description: '商品分类' })
   readonly categoryId: number;
@@ -85,6 +93,9 @@ export class ProductVO extends CommonVO {
   @ApiPropertyOptional({ description: '当前价格' })
   readonly price: number;
 
+  @ApiPropertyOptional({ description: '销量' })
+  readonly salesCount: number;
+
   @ApiPropertyOptional({ description: '主图图片集合[ 主图图片链接 ]' })
   readonly mainPictures: string[];
 
@@ -95,7 +106,7 @@ export class ProductVO extends CommonVO {
   readonly skus: SkuEntity[];
 
   @ApiPropertyOptional({ description: '规格集合[ 规格信息 ]' })
-  readonly specs: SpecificationEntity[];
+  readonly specs: SpecsEntity[];
 }
 
 // 分页列表

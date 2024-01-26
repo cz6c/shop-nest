@@ -1,7 +1,7 @@
 import { Controller, Post, UseGuards, Body, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from './dto/auth.dto';
+import { LoginDto, wxLoginDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Public } from '@/decorator/public-auth.decorator';
 import { UserPayload } from './dto/auth.dto';
@@ -26,6 +26,13 @@ export class AuthController {
   @Post('memberLogin')
   async memberLogin(@Body() data: LoginDto) {
     return await this.authService.memberLogin(data);
+  }
+
+  @Public()
+  @ApiOperation({ summary: '微信小程序会员登录' })
+  @Post('wxLogin')
+  async wxLogin(@Body() data: wxLoginDto) {
+    return await this.authService.wxLogin(data);
   }
 
   @Get('test')

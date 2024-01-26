@@ -1,7 +1,7 @@
-import { Entity, Column, OneToMany, ManyToOne, ManyToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
-import { SpecificationEntity } from '@/modules/specification/entities/specification.entity';
+import { SpecsEntity } from '@/modules/specs/entities/specs.entity';
 import { QINIU } from '#/index';
 import { CategoryEntity } from '@/modules/category/entities/category.entity';
 
@@ -10,6 +10,10 @@ export class ProductEntity extends CommonEntity {
   /** 商品名称 */
   @Column({ default: '' })
   name: string;
+
+  /** 商品编码 */
+  @Column({ default: '' })
+  spuCode: string;
 
   /** 商品描述 */
   @Column({ default: '' })
@@ -53,13 +57,17 @@ export class ProductEntity extends CommonEntity {
   @Column({ default: false })
   status: boolean;
 
+  /** 销量 */
+  @Column({ default: 0 })
+  salesCount: number;
+
   /** 一对多sku */
   @OneToMany(() => SkuEntity, (entity) => entity.product)
   skus: SkuEntity[];
 
-  /** 多对多规格 */
-  @ManyToMany(() => SpecificationEntity, (entity) => entity.products)
-  specs: SpecificationEntity[];
+  /** 一对多规格 */
+  @OneToMany(() => SpecsEntity, (entity) => entity.product)
+  specs: SpecsEntity[];
 
   /** 多对一分类 */
   @ManyToOne(() => CategoryEntity, (entity) => entity.products)

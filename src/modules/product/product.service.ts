@@ -10,7 +10,7 @@ import {
   ProductListVO,
 } from './dto/index.dto';
 import { SkuService } from '../sku/sku.service';
-import { SpecificationService } from '../specification/specification.service';
+import { SpecsService } from '../specs/specs.service';
 import { CategoryService } from '../category/category.service';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class ProductService {
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
     private readonly skuService: SkuService,
-    private readonly specificationService: SpecificationService,
+    private readonly specsService: SpecsService,
     private readonly categoryService: CategoryService,
   ) {}
 
@@ -30,14 +30,10 @@ export class ProductService {
     newItem.category = await this.categoryService.findOne(categoryId);
     const product = await this.productRepository.save(newItem);
     // 创建sku和规格
-    await Promise.all(
-      specs.map((spec) =>
-        this.specificationService.create({ ...spec, products: [product] }),
-      ),
+    await this.specsService.batchCreate(
+      specs.map((spec) => ({ ...spec, product })),
     );
-    await Promise.all(
-      skus.map((sku) => this.skuService.create({ ...sku, product })),
-    );
+    await this.skuService.batchCreate(skus.map((sku) => ({ ...sku, product })));
     return product;
   }
 
@@ -74,7 +70,7 @@ export class ProductService {
       relations: ['category', 'skus', 'specs'],
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的product数据不存在`, 200);
     }
     const categoryId = item.category?.id ?? null;
     const categoryName = item.category?.name ?? null;
@@ -83,11 +79,14 @@ export class ProductService {
 
   // 更新
   async update(data: UpdateProductDto) {
-    const { id } = data;
+    const { id, specs, skus } = data;
     const item = await this.productRepository.findOne({
       where: { id, isDelete: false },
     });
     const updateItem = this.productRepository.merge(item, data);
+    // 同步更新sku和规格
+    await Promise.all(specs.map((spec) => this.specsService.update(spec)));
+    await Promise.all(skus.map((sku) => this.skuService.update(sku)));
     return this.productRepository.save(updateItem);
   }
 
@@ -97,7 +96,7 @@ export class ProductService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 400);
+      throw new HttpException(`id为${id}的product数据不存在`, 400);
     }
     // return await this.productRepository.remove(item);
     item.isDelete = true;

@@ -52,3 +52,13 @@ export class IdDto {
   @IsInt()
   readonly id: number;
 }
+
+/**
+ * @description: ids
+ */
+export class IdsDto {
+  @ApiProperty({ description: 'ids' })
+  @IsPositive({ each: true })
+  @IsInt({ each: true })
+  readonly ids: number[];
+}

@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber } from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -11,23 +11,20 @@ import { SkuEntity } from '@/modules/sku/entities/sku.entity';
 // 新增
 export class CreateCartDto {
   @ApiProperty({ description: '数量' })
-  @IsString()
-  @IsNotEmpty()
+  @IsNumber()
   readonly count: number;
-
-  @ApiProperty({ description: '是否选中' })
-  @IsBoolean()
-  @IsNotEmpty()
-  readonly selected: boolean;
 
   @ApiProperty({ description: 'skuId' })
   @IsNumber()
-  @IsNotEmpty()
   readonly skuId: number;
 }
 
 // 更新
-export class UpdateCartDto extends IntersectionType(IdDto, CreateCartDto) {}
+export class UpdateCartDto extends IntersectionType(IdDto, CreateCartDto) {
+  @ApiProperty({ description: '是否选中' })
+  @IsBoolean()
+  readonly selected: boolean;
+}
 
 // 详情
 export class CartVO extends CommonVO {
@@ -37,8 +34,11 @@ export class CartVO extends CommonVO {
   @ApiPropertyOptional({ description: '是否选中' })
   readonly selected: boolean;
 
-  @ApiPropertyOptional({ description: 'skuId' })
+  @ApiPropertyOptional({ description: 'sku信息' })
   readonly sku: SkuEntity;
+
+  @ApiPropertyOptional({ description: '加入购物车价格' })
+  readonly price: number;
 }
 
 // 分页列表

@@ -3,6 +3,7 @@ import {
   ApiProperty,
   ApiPropertyOptional,
   IntersectionType,
+  OmitType,
 } from '@nestjs/swagger';
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
@@ -44,7 +45,10 @@ export class CreateSkuDto {
 }
 
 // 更新
-export class UpdateSkuDto extends IntersectionType(IdDto, CreateSkuDto) {}
+export class UpdateSkuDto extends IntersectionType(
+  IdDto,
+  OmitType(CreateSkuDto, ['product'] as const),
+) {}
 
 // 详情
 export class SkuVO extends CommonVO {
@@ -68,6 +72,9 @@ export class SkuVO extends CommonVO {
 
   @ApiPropertyOptional({ description: '规格集合[ 规格信息 ]' })
   readonly specs: string;
+
+  @ApiPropertyOptional({ description: '关联商品' })
+  readonly product: ProductEntity;
 }
 
 // 分页列表

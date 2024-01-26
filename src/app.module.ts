@@ -10,6 +10,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { AddressModule } from './modules/address/address.module';
 import { CartModule } from './modules/cart/cart.module';
 import { SkuModule } from './modules/sku/sku.module';
+import { SpecsModule } from './modules/specs/specs.module';
 import { ProductModule } from './modules/product/product.module';
 import { SpecificationModule } from './modules/specification/specification.module';
 import { MemberModule } from './modules/member/member.module';
@@ -45,6 +46,7 @@ import envConfig from '../config/env';
     AddressModule,
     CartModule,
     SkuModule,
+    SpecsModule,
     ProductModule,
     SpecificationModule,
     MemberModule,
