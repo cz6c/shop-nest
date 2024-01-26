@@ -25,13 +25,11 @@ export class CategoryService {
     if (item) {
       throw new HttpException(`${name}已存在`, 200);
     }
+    const newItem = this.categoryRepository.create(data);
     const parent = await this.categoryRepository.findOne({
       where: { id: parentId, isDelete: false },
     });
-    const newItem = this.categoryRepository.create({
-      ...data,
-      parentId: parent ? parentId : null,
-    });
+    newItem.parentId = parent ? parentId : null;
     return await this.categoryRepository.save(newItem);
   }
 

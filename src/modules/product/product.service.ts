@@ -27,9 +27,9 @@ export class ProductService {
   async create(data: CreateProductDto) {
     const { skus, specs, categoryId } = data;
     const newItem = this.productRepository.create(data);
-    console.log(newItem, '--newItem');
     newItem.category = await this.categoryService.findOne(categoryId);
     const product = await this.productRepository.save(newItem);
+    // 创建sku和规格
     await Promise.all(
       specs.map((spec) =>
         this.specificationService.create({ ...spec, products: [product] }),
@@ -54,22 +54,31 @@ export class ProductService {
     const take = limit ?? 0;
     const [list, total] = await this.productRepository.findAndCount({
       where,
+      relations: ['category'],
       order: { updateTime: 'DESC' },
       skip,
       take,
     });
-    return { list, page, limit, total };
+    const arr = list.map((item) => {
+      const categoryId = item.category?.id ?? null;
+      const categoryName = item.category?.name ?? null;
+      return { ...item, categoryId, categoryName };
+    });
+    return { list: arr, page, limit, total };
   }
 
   // 详情
   async findOne(id: number): Promise<ProductVO> {
     const item = await this.productRepository.findOne({
       where: { id, isDelete: false },
+      relations: ['category', 'skus', 'specs'],
     });
     if (!item) {
       throw new HttpException(`id为${id}的数据不存在`, 200);
     }
-    return item;
+    const categoryId = item.category?.id ?? null;
+    const categoryName = item.category?.name ?? null;
+    return { ...item, categoryId, categoryName };
   }
 
   // 更新

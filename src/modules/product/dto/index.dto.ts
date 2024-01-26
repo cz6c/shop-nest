@@ -70,6 +70,15 @@ export class ProductVO extends CommonVO {
   @ApiPropertyOptional({ description: '商品名称' })
   readonly name: string;
 
+  @ApiPropertyOptional({ description: '商品分类' })
+  readonly categoryId: number;
+
+  @ApiPropertyOptional({ description: '商品分类' })
+  readonly categoryName: string;
+
+  @ApiPropertyOptional({ description: '商品状态' })
+  readonly status: boolean;
+
   @ApiPropertyOptional({ description: '商品描述' })
   readonly desc: string;
 

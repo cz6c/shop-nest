@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -39,7 +39,7 @@ export class CreateSkuDto {
   readonly specs: string;
 
   @ApiProperty({ description: '关联商品' })
-  @IsOptional()
+  @IsNotEmpty()
   readonly product: ProductEntity;
 }
 

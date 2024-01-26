@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, ManyToMany } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
 import { SpecificationEntity } from '@/modules/specification/entities/specification.entity';
@@ -58,7 +58,7 @@ export class ProductEntity extends CommonEntity {
   skus: SkuEntity[];
 
   /** 多对多规格 */
-  @OneToMany(() => SpecificationEntity, (entity) => entity.products)
+  @ManyToMany(() => SpecificationEntity, (entity) => entity.products)
   specs: SpecificationEntity[];
 
   /** 多对一分类 */

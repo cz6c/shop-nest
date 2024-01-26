@@ -21,7 +21,7 @@ export class CreateSpecificationDto {
   readonly options: string[];
 
   @ApiProperty({ description: '关联商品' })
-  @IsOptional()
+  @IsArray()
   readonly products: ProductEntity[];
 }
 
