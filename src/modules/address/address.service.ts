@@ -31,8 +31,7 @@ export class AddressService {
         },
       });
       if (list[0]) {
-        list[0].isDefault = false;
-        await this.addressRepository.save(list[0]);
+        await this.addressRepository.update(list[0].id, { isDefault: false });
       }
     }
     const newItem = this.addressRepository.create(data);
@@ -85,8 +84,7 @@ export class AddressService {
         },
       });
       if (list[0]) {
-        list[0].isDefault = false;
-        await this.addressRepository.save(list[0]);
+        await this.addressRepository.update(list[0].id, { isDefault: false });
       }
     }
     const item = await this.addressRepository.findOne({
@@ -118,9 +116,8 @@ export class AddressService {
       },
     });
     if (list[0]) {
-      list[0].isDefault = false;
-      await this.addressRepository.save(list[0]);
+      await this.addressRepository.update(list[0].id, { isDefault: false });
     }
-    return this.addressRepository.update(id, { isDefault: true });
+    this.addressRepository.update(id, { isDefault: true });
   }
 }
