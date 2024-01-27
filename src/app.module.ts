@@ -15,6 +15,7 @@ import { ProductModule } from './modules/product/product.module';
 import { SpecificationModule } from './modules/specification/specification.module';
 import { MemberModule } from './modules/member/member.module';
 import { BannerModule } from './modules/banner/banner.module';
+import { AreaModule } from './area/area.module';
 import envConfig from '../config/env';
 
 @Module({
@@ -51,6 +52,7 @@ import envConfig from '../config/env';
     SpecificationModule,
     MemberModule,
     BannerModule,
+    AreaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
