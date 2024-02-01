@@ -50,7 +50,7 @@ export class CategoryService {
   }
 
   // 详情
-  async findOne(id: number) {
+  async findOne(id: string) {
     const item = await this.categoryRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -62,7 +62,7 @@ export class CategoryService {
 
   // 更新
   async update(data: UpdateCategoryDto) {
-    const { id, parentId = 0 } = data;
+    const { id, parentId = '' } = data;
     const item = await this.categoryRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -80,7 +80,7 @@ export class CategoryService {
   }
 
   // 刪除
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.categoryRepository.findOne({
       where: { id, isDelete: false },
     });

@@ -49,7 +49,7 @@ export class UserService {
   }
 
   // 详情
-  async findOne(id: number): Promise<UserVO> {
+  async findOne(id: string): Promise<UserVO> {
     const item = await this.userRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -60,7 +60,7 @@ export class UserService {
   }
 
   // 更新
-  async update(data: UpdateUserDto, id: number) {
+  async update(data: UpdateUserDto, id: string) {
     const item = await this.userRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -69,7 +69,7 @@ export class UserService {
   }
 
   // 刪除
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.userRepository.findOne({
       where: { id, isDelete: false },
     });

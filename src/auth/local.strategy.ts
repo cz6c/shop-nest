@@ -20,6 +20,6 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       throw new HttpException('密码错误！', 400);
     }
 
-    return { username, userId: user.id, memberId: 0 };
+    return { username, userId: user.id, memberId: '' };
   }
 }

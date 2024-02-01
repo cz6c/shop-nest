@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
 import {
   ApiProperty,
@@ -28,8 +29,8 @@ export class CreateProductDto {
   readonly spuCode: string;
 
   @ApiProperty({ description: '商品分类' })
-  @IsNumber()
-  readonly categoryId: number;
+  @IsUUID()
+  readonly categoryId: string;
 
   @ApiProperty({ description: '商品描述' })
   @IsString()
@@ -79,7 +80,7 @@ export class ProductVO extends CommonVO {
   readonly spuCode: string;
 
   @ApiPropertyOptional({ description: '商品分类' })
-  readonly categoryId: number;
+  readonly categoryId: string;
 
   @ApiPropertyOptional({ description: '商品分类' })
   readonly categoryName: string;

@@ -45,7 +45,7 @@ export class SkuService {
   }
 
   // 详情
-  async findOne(id: number) {
+  async findOne(id: string) {
     const item = await this.skuRepository.findOne({
       where: { id, isDelete: false },
       relations: ['product'],
@@ -87,7 +87,7 @@ export class SkuService {
   }
 
   // 刪除
-  async removes(ids: number[]) {
+  async removes(ids: string[]) {
     const items = await this.skuRepository.findBy({
       id: In(ids),
     });

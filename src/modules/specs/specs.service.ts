@@ -38,7 +38,7 @@ export class SpecsService {
   }
 
   // 刪除
-  async removes(ids: number[]) {
+  async removes(ids: string[]) {
     const items = await this.specsRepository.findBy({
       id: In(ids),
     });

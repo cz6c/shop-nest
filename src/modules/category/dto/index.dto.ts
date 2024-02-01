@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -14,8 +14,8 @@ export class CreateCategoryDto {
   readonly name: string;
 
   @ApiProperty({ description: 'parentId' })
-  @IsInt()
-  readonly parentId: number;
+  @IsUUID()
+  readonly parentId: string;
 }
 
 export class UpdateCategoryDto extends IntersectionType(
@@ -28,7 +28,7 @@ export class CategoryVO extends CommonVO {
   readonly name: string;
 
   @ApiPropertyOptional({ description: 'parentId' })
-  readonly parentId: number;
+  readonly parentId: string;
 
   @ApiPropertyOptional({ description: 'children' })
   readonly children?: CategoryVO[];
@@ -38,6 +38,6 @@ export class CategoryVO extends CommonVO {
 export class CategoryListParamsDto {
   @ApiPropertyOptional({ description: 'parentId' })
   @IsOptional()
-  @IsInt()
-  readonly parentId: number;
+  @IsUUID()
+  readonly parentId: string;
 }

@@ -10,10 +10,10 @@ export class BannerEntity extends CommonEntity {
 
   /** 图片链接 */
   @Column({
-    nullable: true,
+    default: '',
     transformer: {
       to(value) {
-        return value.replace(QINIU.DOMAIN, '');
+        return value ? value.replace(QINIU.DOMAIN, '') : '';
       },
       from(value) {
         return value ? `${QINIU.DOMAIN}${value}` : '';

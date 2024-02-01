@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber } from 'class-validator';
+import { IsBoolean, IsNumber, IsUUID } from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -15,8 +15,8 @@ export class CreateCartDto {
   readonly count: number;
 
   @ApiProperty({ description: 'skuId' })
-  @IsNumber()
-  readonly skuId: number;
+  @IsUUID()
+  readonly skuId: string;
 }
 
 // 更新

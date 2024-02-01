@@ -23,7 +23,7 @@ export class CartController {
 
   @ApiOperation({ summary: '加入购物车' })
   @Post('create')
-  create(@Body() data: CreateCartDto, @GetUser('memberId') memberId: number) {
+  create(@Body() data: CreateCartDto, @GetUser('memberId') memberId: string) {
     return this.cartService.create(data, memberId);
   }
 
@@ -32,7 +32,7 @@ export class CartController {
   @Get('list')
   async findAll(
     @Query() params: CartListParamsDto,
-    @GetUser('memberId') memberId: number,
+    @GetUser('memberId') memberId: string,
   ) {
     return await this.cartService.findAll(params, memberId);
   }

@@ -28,7 +28,7 @@ export class AuthService {
 
     return this.login({
       username,
-      userId: 0,
+      userId: '',
       memberId: member.id,
     });
   }

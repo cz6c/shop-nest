@@ -8,7 +8,7 @@ import {
 export abstract class CommonEntity {
   // 主键id
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   // 创建时间
   @CreateDateColumn({ type: 'timestamp', nullable: true })

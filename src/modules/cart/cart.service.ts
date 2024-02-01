@@ -21,7 +21,7 @@ export class CartService {
   ) {}
 
   // 加入购物车
-  async create(data: CreateCartDto, memberId: number) {
+  async create(data: CreateCartDto, memberId: string) {
     const newItem = this.cartRepository.create(data);
     newItem.member = await this.memberService.findOne(memberId);
     newItem.sku = await this.skuService.findOne(data.skuId);
@@ -32,7 +32,7 @@ export class CartService {
   // 购物车列表
   async findAll(
     query: CartListParamsDto,
-    memberId: number,
+    memberId: string,
   ): Promise<CartListVO> {
     const { page, limit } = query;
     const where: Record<string, any> = {
@@ -67,7 +67,7 @@ export class CartService {
   }
 
   // 删除/清空购物车单品
-  async delete(ids: number[]) {
+  async delete(ids: string[]) {
     // const list = await this.cartRepository.findBy({
     //   id: In(ids),
     // });

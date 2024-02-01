@@ -9,8 +9,8 @@ export class CategoryEntity extends CommonEntity {
   name: string;
 
   /** 父级分类id */
-  @Column({ nullable: true })
-  parentId: number;
+  @Column({ type: 'uuid', nullable: true })
+  parentId: string;
 
   /** 一对多商品 */
   @OneToMany(() => ProductEntity, (entity) => entity.category)

@@ -48,7 +48,7 @@ export class MemberService {
   }
 
   // 详情
-  async findOne(id: number) {
+  async findOne(id: string) {
     const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -59,7 +59,7 @@ export class MemberService {
   }
 
   // 更新
-  async update(data: UpdateMemberDto, id: number) {
+  async update(data: UpdateMemberDto, id: string) {
     const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -71,7 +71,7 @@ export class MemberService {
   }
 
   // 刪除
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.memberRepository.findOne({
       where: { id, isDelete: false },
     });

@@ -29,7 +29,9 @@ export class ProductEntity extends CommonEntity {
     nullable: true,
     transformer: {
       to(value) {
-        return value.map((c: string) => c.replace(QINIU.DOMAIN, ''));
+        return value
+          ? value.map((c: string) => c.replace(QINIU.DOMAIN, ''))
+          : [];
       },
       from(value) {
         return value ? value.map((c: string) => `${QINIU.DOMAIN}${c}`) : [];
@@ -44,7 +46,9 @@ export class ProductEntity extends CommonEntity {
     nullable: true,
     transformer: {
       to(value) {
-        return value.map((c: string) => c.replace(QINIU.DOMAIN, ''));
+        return value
+          ? value.map((c: string) => c.replace(QINIU.DOMAIN, ''))
+          : [];
       },
       from(value) {
         return value ? value.map((c: string) => `${QINIU.DOMAIN}${c}`) : [];

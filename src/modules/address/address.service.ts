@@ -20,7 +20,7 @@ export class AddressService {
   ) {}
 
   // 添加收货地址
-  async create(data: CreateAddressDto, memberId: number) {
+  async create(data: CreateAddressDto, memberId: string) {
     // 新增地址为默认时
     if (data.isDefault) {
       const list = await this.addressRepository.find({
@@ -42,7 +42,7 @@ export class AddressService {
   // 收货地址列表
   async findAll(
     query: AddressListParamsDto,
-    memberId: number,
+    memberId: string,
   ): Promise<AddressListVO> {
     const { page, limit } = query;
     const where: Record<string, any> = {
@@ -61,7 +61,7 @@ export class AddressService {
   }
 
   // 收货地址详情
-  async findOne(id: number): Promise<AddressVO> {
+  async findOne(id: string): Promise<AddressVO> {
     const item = await this.addressRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -72,7 +72,7 @@ export class AddressService {
   }
 
   // 更新收货地址
-  async update(data: UpdateAddressDto, memberId: number) {
+  async update(data: UpdateAddressDto, memberId: string) {
     const { id } = data;
     // 更新地址为默认时
     if (data.isDefault) {
@@ -95,7 +95,7 @@ export class AddressService {
   }
 
   // 刪除收货地址
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.addressRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -107,7 +107,7 @@ export class AddressService {
   }
 
   // 设置默认收货地址
-  async setDefault(id: number, memberId: number) {
+  async setDefault(id: string, memberId: string) {
     const list = await this.addressRepository.find({
       where: {
         isDelete: false,

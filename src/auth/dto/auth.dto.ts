@@ -15,9 +15,9 @@ export class LoginDto {
 
 // token payload
 export class UserPayload {
-  readonly userId: number; //用户id
+  readonly userId: string; //用户id
   readonly username: string;
-  readonly memberId: number; //会员id
+  readonly memberId: string; //会员id
 }
 
 // 微信小程序登录

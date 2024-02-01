@@ -40,7 +40,7 @@ export class MemberController {
   @ApiOperation({ summary: '详情' })
   @ApiOkResponse({ type: MemberVO })
   @Get('info')
-  async findOne(@GetUser('memberId') memberId: number) {
+  async findOne(@GetUser('memberId') memberId: string) {
     return await this.memberService.findOne(memberId);
   }
 
@@ -48,7 +48,7 @@ export class MemberController {
   @Post('update')
   async update(
     @Body() data: UpdateMemberDto,
-    @GetUser('memberId') memberId: number,
+    @GetUser('memberId') memberId: string,
   ) {
     return await this.memberService.update(data, memberId);
   }

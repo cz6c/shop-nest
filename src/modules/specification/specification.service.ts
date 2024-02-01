@@ -46,7 +46,7 @@ export class SpecificationService {
   }
 
   // 详情
-  async findOne(id: number): Promise<SpecificationVO> {
+  async findOne(id: string): Promise<SpecificationVO> {
     const item = await this.specificationRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -67,7 +67,7 @@ export class SpecificationService {
   }
 
   // 刪除
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.specificationRepository.findOne({
       where: { id, isDelete: false },
     });

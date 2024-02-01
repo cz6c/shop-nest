@@ -1,4 +1,4 @@
-import { IsOptional, IsPositive, IsInt } from 'class-validator';
+import { IsOptional, IsPositive, IsInt, IsUUID } from 'class-validator';
 import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -34,7 +34,7 @@ export class PaginationVO {
  */
 export class CommonVO {
   @ApiPropertyOptional({ description: 'id' })
-  readonly id: number;
+  readonly id: string;
 
   @ApiPropertyOptional({ description: '创建时间' })
   readonly createTime: Date;
@@ -48,9 +48,8 @@ export class CommonVO {
  */
 export class IdDto {
   @ApiProperty({ description: 'id' })
-  @IsPositive()
-  @IsInt()
-  readonly id: number;
+  @IsUUID()
+  readonly id: string;
 }
 
 /**
@@ -58,7 +57,6 @@ export class IdDto {
  */
 export class IdsDto {
   @ApiProperty({ description: 'ids' })
-  @IsPositive({ each: true })
-  @IsInt({ each: true })
-  readonly ids: number[];
+  @IsUUID('all', { each: true })
+  readonly ids: string[];
 }

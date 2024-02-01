@@ -12,7 +12,7 @@ import {
 import { SkuService } from '../sku/sku.service';
 import { SpecsService } from '../specs/specs.service';
 import { CategoryService } from '../category/category.service';
-import { isEqual } from 'lodash-es';
+import { isEqual } from 'lodash';
 
 @Injectable()
 export class ProductService {
@@ -65,7 +65,7 @@ export class ProductService {
   }
 
   // 详情
-  async findOne(id: number): Promise<ProductVO> {
+  async findOne(id: string): Promise<ProductVO> {
     const item = await this.productRepository.findOne({
       where: { id, isDelete: false },
       relations: ['category', 'skus', 'specs'],
@@ -116,7 +116,7 @@ export class ProductService {
   }
 
   // 刪除
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.productRepository.findOne({
       where: { id, isDelete: false },
     });

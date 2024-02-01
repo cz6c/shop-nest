@@ -17,10 +17,10 @@ export class MemberEntity extends CommonEntity {
   nickname: string;
 
   @Column({
-    nullable: true,
+    default: '',
     transformer: {
       to(value) {
-        return value.replace(QINIU.DOMAIN, '');
+        return value ? value.replace(QINIU.DOMAIN, '') : '';
       },
       from(value) {
         return value ? `${QINIU.DOMAIN}${value}` : '';

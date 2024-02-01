@@ -26,7 +26,7 @@ export class AddressController {
   @Post('create')
   create(
     @Body() data: CreateAddressDto,
-    @GetUser('memberId') memberId: number,
+    @GetUser('memberId') memberId: string,
   ) {
     return this.addressService.create(data, memberId);
   }
@@ -36,7 +36,7 @@ export class AddressController {
   @Get('list')
   async findAll(
     @Query() params: AddressListParamsDto,
-    @GetUser('memberId') memberId: number,
+    @GetUser('memberId') memberId: string,
   ) {
     return await this.addressService.findAll(params, memberId);
   }
@@ -52,7 +52,7 @@ export class AddressController {
   @Post('update')
   async update(
     @Body() data: UpdateAddressDto,
-    @GetUser('memberId') memberId: number,
+    @GetUser('memberId') memberId: string,
   ) {
     return await this.addressService.update(data, memberId);
   }
@@ -67,7 +67,7 @@ export class AddressController {
   @Get('setDefault')
   async setDefault(
     @Query() params: IdDto,
-    @GetUser('memberId') memberId: number,
+    @GetUser('memberId') memberId: string,
   ) {
     return await this.addressService.setDefault(params.id, memberId);
   }

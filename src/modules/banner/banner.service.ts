@@ -41,7 +41,7 @@ export class BannerService {
   }
 
   // 详情
-  async findOne(id: number): Promise<BannerVO> {
+  async findOne(id: string): Promise<BannerVO> {
     const item = await this.bannerRepository.findOne({
       where: { id, isDelete: false },
     });
@@ -62,7 +62,7 @@ export class BannerService {
   }
 
   // 刪除
-  async remove(id: number) {
+  async remove(id: string) {
     const item = await this.bannerRepository.findOne({
       where: { id, isDelete: false },
     });
