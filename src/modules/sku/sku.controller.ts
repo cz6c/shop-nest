@@ -12,7 +12,7 @@ import {
   SkuListVO,
   SkuListParamsDto,
 } from './dto/index.dto';
-import { IdDto } from '@/common/common.dto';
+import { IdDto, IdsDto } from '@/common/common.dto';
 
 @ApiTags('商品sku管理')
 @ApiBearerAuth()
@@ -40,9 +40,9 @@ export class SkuController {
     return await this.skuService.update(data);
   }
 
-  @ApiOperation({ summary: '删除' })
+  @ApiOperation({ summary: '批量删除' })
   @Post('delete')
-  async remove(@Body() data: IdDto) {
-    return await this.skuService.remove(data.id);
+  async removes(@Body() data: IdsDto) {
+    return await this.skuService.removes(data.ids);
   }
 }

@@ -103,10 +103,10 @@ export class ProductVO extends CommonVO {
   readonly pictures: string[];
 
   @ApiPropertyOptional({ description: 'sku集合[ sku信息 ]' })
-  readonly skus: SkuEntity[];
+  readonly skus?: SkuEntity[];
 
   @ApiPropertyOptional({ description: '规格集合[ 规格信息 ]' })
-  readonly specs: SpecsEntity[];
+  readonly specs?: SpecsEntity[];
 }
 
 // 分页列表

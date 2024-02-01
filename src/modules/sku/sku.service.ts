@@ -1,6 +1,6 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { SkuEntity } from './entities/sku.entity';
 import {
   CreateSkuDto,
@@ -8,6 +8,7 @@ import {
   SkuListParamsDto,
   SkuListVO,
 } from './dto/index.dto';
+import { ProductEntity } from '../product/entities/product.entity';
 
 @Injectable()
 export class SkuService {
@@ -17,11 +18,6 @@ export class SkuService {
   ) {}
 
   // 创建
-  async create(data: CreateSkuDto) {
-    const newItem = this.skuRepository.create(data);
-    return await this.skuRepository.save(newItem);
-  }
-
   async batchCreate(data: CreateSkuDto[]) {
     const newItem = this.skuRepository.create(data);
     return await this.skuRepository.save(newItem);
@@ -63,23 +59,39 @@ export class SkuService {
   // 更新
   async update(data: UpdateSkuDto) {
     const { id } = data;
-    const item = await this.skuRepository.findOne({
-      where: { id, isDelete: false },
-    });
-    const updateItem = this.skuRepository.merge(item, data);
-    return this.skuRepository.save(updateItem);
+    // const item = await this.skuRepository.findOne({
+    //   where: { id, isDelete: false },
+    // });
+    // const updateItem = this.skuRepository.merge(item, data);
+    // return this.skuRepository.save(updateItem);
+    return await this.skuRepository.update(id, data);
+  }
+
+  async batchUpdate(data: UpdateSkuDto[], product: ProductEntity) {
+    // 有新增则新增
+    const newdata = data.filter((c) => !c.id).map((x) => ({ ...x, product }));
+    const newItems = newdata.length ? await this.batchCreate(newdata) : [];
+    // 其他的更新
+    const updateData = data.filter((c) => c.id);
+    const updateItems = await Promise.all(
+      updateData.map(async (c) => {
+        const { id } = c;
+        const item = await this.skuRepository.findOne({
+          where: { id },
+        });
+        const updateItem = this.skuRepository.merge(item, c);
+        return await this.skuRepository.save(updateItem);
+      }),
+    );
+    return [...newItems, ...updateItems];
   }
 
   // 刪除
-  async remove(id: number) {
-    const item = await this.skuRepository.findOne({
-      where: { id, isDelete: false },
+  async removes(ids: number[]) {
+    const items = await this.skuRepository.findBy({
+      id: In(ids),
     });
-    if (!item) {
-      throw new HttpException(`id为${id}的sku数据不存在`, 400);
-    }
-    // return await this.skuRepository.remove(item);
-    item.isDelete = true;
-    return this.skuRepository.save(item);
+    items.forEach((c) => (c.isDelete = true));
+    return await this.skuRepository.save(items);
   }
 }

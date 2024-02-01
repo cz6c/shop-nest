@@ -20,7 +20,7 @@ export class ProductEntity extends CommonEntity {
   desc: string;
 
   /** 当前价格 */
-  @Column({ default: 0 })
+  @Column({ type: 'float', precision: 2, default: 0 })
   price: number;
 
   /** 主图图片集合[ 主图图片链接 ] */

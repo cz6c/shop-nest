@@ -7,7 +7,7 @@ import {
 
 export abstract class CommonEntity {
   // 主键id
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   // 创建时间

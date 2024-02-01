@@ -3,6 +3,7 @@ import {
   ApiProperty,
   ApiPropertyOptional,
   IntersectionType,
+  OmitType,
 } from '@nestjs/swagger';
 import { CommonVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
@@ -26,7 +27,10 @@ export class CreateSpecsDto {
 }
 
 // 更新
-export class UpdateSpecsDto extends IntersectionType(IdDto, CreateSpecsDto) {}
+export class UpdateSpecsDto extends IntersectionType(
+  IdDto,
+  OmitType(CreateSpecsDto, ['product'] as const),
+) {}
 
 // 详情
 export class SpecsVO extends CommonVO {

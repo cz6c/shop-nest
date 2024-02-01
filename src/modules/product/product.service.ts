@@ -12,6 +12,7 @@ import {
 import { SkuService } from '../sku/sku.service';
 import { SpecsService } from '../specs/specs.service';
 import { CategoryService } from '../category/category.service';
+import { isEqual } from 'lodash-es';
 
 @Injectable()
 export class ProductService {
@@ -74,19 +75,43 @@ export class ProductService {
     }
     const categoryId = item.category?.id ?? null;
     const categoryName = item.category?.name ?? null;
-    return { ...item, categoryId, categoryName };
+    return {
+      ...item,
+      categoryId,
+      categoryName,
+      skus: item.skus.filter((c) => c.isDelete),
+      specs: item.specs.filter((c) => c.isDelete),
+    };
   }
 
   // 更新
   async update(data: UpdateProductDto) {
-    const { id, specs, skus } = data;
+    const { id, specs, skus, categoryId } = data;
     const item = await this.productRepository.findOne({
       where: { id, isDelete: false },
+      relations: ['category', 'skus', 'specs'],
     });
-    const updateItem = this.productRepository.merge(item, data);
-    // 同步更新sku和规格
-    await Promise.all(specs.map((spec) => this.specsService.update(spec)));
-    await Promise.all(skus.map((sku) => this.skuService.update(sku)));
+    const mergeData = {};
+    for (const key in data) {
+      if (
+        Object.prototype.hasOwnProperty.call(data, key) &&
+        !['specs', 'skus'].includes(key)
+      ) {
+        mergeData[key] = data[key];
+      }
+    }
+    const updateItem = this.productRepository.merge(item, mergeData);
+    // 同步更新sku和规格/分类
+    if (!isEqual(specs, item.specs)) {
+      updateItem.specs = await this.specsService.batchUpdate(specs, item);
+    }
+    if (!isEqual(skus, item.skus)) {
+      updateItem.skus = await this.skuService.batchUpdate(skus, item);
+    }
+    // 分类改变时更新分类
+    if (item.category.id !== categoryId) {
+      updateItem.category = await this.categoryService.findOne(categoryId);
+    }
     return this.productRepository.save(updateItem);
   }
 
