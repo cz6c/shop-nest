@@ -12,6 +12,7 @@ import {
   MemberVO,
   MemberListVO,
   MemberListParamsDto,
+  RegisterMemberDto,
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 import { Public } from '@/decorator/public-auth.decorator';
@@ -24,10 +25,16 @@ export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @Public()
-  @ApiOperation({ summary: '创建' })
+  @ApiOperation({ summary: '注册' })
   @Post('register')
-  create(@Body() createMemberDto: CreateMemberDto) {
-    return this.memberService.create(createMemberDto);
+  register(@Body() data: RegisterMemberDto) {
+    return this.memberService.register(data);
+  }
+
+  @ApiOperation({ summary: '创建' })
+  @Post('create')
+  create(@Body() data: CreateMemberDto) {
+    return this.memberService.create(data);
   }
 
   @ApiOperation({ summary: '列表' })

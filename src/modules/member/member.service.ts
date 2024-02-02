@@ -7,6 +7,7 @@ import {
   UpdateMemberDto,
   MemberListVO,
   MemberListParamsDto,
+  RegisterMemberDto,
 } from './dto/index.dto';
 
 @Injectable()
@@ -15,6 +16,19 @@ export class MemberService {
     @InjectRepository(MemberEntity)
     private readonly memberRepository: Repository<MemberEntity>,
   ) {}
+
+  // 注册
+  async register(data: RegisterMemberDto) {
+    const { username } = data;
+    const item = await this.memberRepository.findOne({
+      where: { username, isDelete: false },
+    });
+    if (item) {
+      throw new HttpException(`${username}已存在`, 200);
+    }
+    const newItem = this.memberRepository.create(data);
+    return await this.memberRepository.save(newItem);
+  }
 
   // 创建
   async create(data: CreateMemberDto) {

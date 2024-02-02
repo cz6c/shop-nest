@@ -12,6 +12,7 @@ import {
   UserVO,
   UserListVO,
   UserListParamsDto,
+  RegisterUserDto,
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 import { Public } from '@/decorator/public-auth.decorator';
@@ -24,8 +25,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Public()
-  @ApiOperation({ summary: '创建' })
+  @ApiOperation({ summary: '注册' })
   @Post('register')
+  register(@Body() data: RegisterUserDto) {
+    return this.userService.register(data);
+  }
+
+  @ApiOperation({ summary: '创建' })
+  @Post('create')
   create(@Body() data: CreateUserDto) {
     return this.userService.create(data);
   }

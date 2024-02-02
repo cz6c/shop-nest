@@ -8,6 +8,7 @@ import {
   UserVO,
   UserListVO,
   UserListParamsDto,
+  RegisterUserDto,
 } from './dto/index.dto';
 
 @Injectable()
@@ -16,6 +17,19 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
+
+  // 注册
+  async register(data: RegisterUserDto) {
+    const { username } = data;
+    const item = await this.userRepository.findOne({
+      where: { username, isDelete: false },
+    });
+    if (item) {
+      throw new HttpException(`${username}已存在`, 200);
+    }
+    const newItem = this.userRepository.create(data);
+    return await this.userRepository.save(newItem);
+  }
 
   // 创建
   async create(data: CreateUserDto) {
