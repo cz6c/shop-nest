@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateIf,
+} from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -14,6 +20,10 @@ export class CreateCategoryDto {
   readonly name: string;
 
   @ApiProperty({ description: 'parentId' })
+  // 当提供的条件函数返回 false 时，忽略属性上的其他验证器。
+  @ValidateIf((dto: CreateCategoryDto) => {
+    if (dto.parentId === null) return false;
+  })
   @IsUUID()
   readonly parentId: string;
 }

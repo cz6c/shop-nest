@@ -26,8 +26,11 @@ export class SkuEntity extends CommonEntity {
   skuCode: string;
 
   /** 规格集合[ 规格信息 ] */
-  @Column({ default: '' })
-  specs: string;
+  @Column({
+    type: 'simple-array',
+    nullable: true,
+  })
+  specVals: string[];
 
   /** 多对一商品 */
   @ManyToOne(() => ProductEntity, (entity) => entity.skus)

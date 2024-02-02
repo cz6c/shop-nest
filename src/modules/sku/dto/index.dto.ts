@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -32,8 +38,9 @@ export class CreateSkuDto {
   readonly skuCode: string;
 
   @ApiProperty({ description: '规格集合[ 规格信息 ]' })
-  @IsString()
-  readonly specs: string;
+  @IsArray()
+  @IsString({ each: true })
+  readonly specVals: string[];
 
   @ApiProperty({ description: '关联商品' })
   @IsNotEmpty()
@@ -64,7 +71,7 @@ export class SkuVO extends CommonVO {
   readonly skuCode: string;
 
   @ApiPropertyOptional({ description: '规格集合[ 规格信息 ]' })
-  readonly specs: string;
+  readonly specVals: string[];
 
   @ApiPropertyOptional({ description: '关联商品' })
   readonly product: ProductEntity;

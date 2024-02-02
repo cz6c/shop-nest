@@ -79,8 +79,8 @@ export class ProductService {
       ...item,
       categoryId,
       categoryName,
-      skus: item.skus.filter((c) => c.isDelete),
-      specs: item.specs.filter((c) => c.isDelete),
+      skus: item.skus.filter((c) => !c.isDelete),
+      specs: item.specs.filter((c) => !c.isDelete),
     };
   }
 
@@ -125,6 +125,17 @@ export class ProductService {
     }
     // return await this.productRepository.remove(item);
     item.isDelete = true;
+    return this.productRepository.save(item);
+  }
+
+  async statusCheck(id: string) {
+    const item = await this.productRepository.findOne({
+      where: { id, isDelete: false },
+    });
+    if (!item) {
+      throw new HttpException(`id为${id}的product数据不存在`, 400);
+    }
+    item.status = !item.status;
     return this.productRepository.save(item);
   }
 }

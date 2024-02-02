@@ -52,4 +52,10 @@ export class ProductController {
   async remove(@Body() data: IdDto) {
     return await this.productService.remove(data.id);
   }
+
+  @ApiOperation({ summary: '状态切换' })
+  @Get('statusCheck')
+  async statusCheck(@Query() params: IdDto) {
+    return await this.productService.statusCheck(params.id);
+  }
 }
