@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -20,6 +20,14 @@ export class CreateBannerDto {
   @ApiProperty({ description: '排序号' })
   @IsNumber()
   readonly sortNum: number;
+
+  @ApiProperty({ description: '状态' })
+  @IsBoolean()
+  readonly status: boolean;
+
+  @ApiProperty({ description: '备注' })
+  @IsString()
+  readonly remark: string;
 }
 
 // 更新
@@ -35,6 +43,14 @@ export class BannerVO extends CommonVO {
 
   @ApiPropertyOptional({ description: '排序号' })
   readonly sortNum: number;
+
+  @ApiPropertyOptional({ description: '状态' })
+  @IsBoolean()
+  readonly status: boolean;
+
+  @ApiPropertyOptional({ description: '备注' })
+  @IsString()
+  readonly remark: string;
 }
 
 // 分页列表

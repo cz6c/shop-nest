@@ -25,4 +25,12 @@ export class BannerEntity extends CommonEntity {
   /** 排序 */
   @Column({ default: 0 })
   sortNum: number;
+
+  /** 备注 */
+  @Column({ default: '' })
+  remark: string;
+
+  /** 状态 */
+  @Column({ default: false })
+  status: boolean;
 }

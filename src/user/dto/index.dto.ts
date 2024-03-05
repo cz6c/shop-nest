@@ -8,10 +8,16 @@ import {
 import {
   ApiProperty,
   ApiPropertyOptional,
+  IntersectionType,
   OmitType,
   PartialType,
 } from '@nestjs/swagger';
-import { PaginationDto, PaginationVO, CommonVO } from '@/common/common.dto';
+import {
+  PaginationDto,
+  PaginationVO,
+  CommonVO,
+  IdDto,
+} from '@/common/common.dto';
 import { Gender } from '@/common/common.enum';
 
 export class RegisterUserDto {
@@ -63,9 +69,10 @@ export class CreateUserDto {
   readonly profession: string;
 }
 
-export class UpdateUserDto extends OmitType(PartialType(CreateUserDto), [
-  'username',
-] as const) {}
+export class UpdateUserDto extends IntersectionType(
+  IdDto,
+  OmitType(PartialType(CreateUserDto), ['username'] as const),
+) {}
 
 export class UserVO extends CommonVO {
   @ApiPropertyOptional({ description: '账号' })

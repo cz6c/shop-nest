@@ -55,7 +55,7 @@ export class CategoryService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的category数据不存在`, 200);
     }
     return item;
   }
@@ -67,7 +67,7 @@ export class CategoryService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的category数据不存在`, 200);
     }
     const parent = await this.categoryRepository.findOne({
       where: { id: parentId, isDelete: false },
@@ -85,7 +85,7 @@ export class CategoryService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的category数据不存在`, 200);
     }
     // return await this.categoryRepository.remove(item);
     item.isDelete = true;

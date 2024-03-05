@@ -51,7 +51,7 @@ export class SpecificationService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的specification数据不存在`, 200);
     }
     return item;
   }
@@ -72,7 +72,7 @@ export class SpecificationService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 400);
+      throw new HttpException(`id为${id}的specification数据不存在`, 400);
     }
     // return await this.specificationRepository.remove(item);
     item.isDelete = true;

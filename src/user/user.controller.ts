@@ -47,14 +47,14 @@ export class UserController {
   @ApiOperation({ summary: '详情' })
   @ApiOkResponse({ type: UserVO })
   @Get('info')
-  async findOne(@GetUser('userId') userId: string) {
-    return await this.userService.findOne(userId);
+  async findOne(@Query('id') id: string, @GetUser('userId') userId: string) {
+    return await this.userService.findOne(id ?? userId);
   }
 
   @ApiOperation({ summary: '更新' })
   @Post('update')
   async update(@Body() data: UpdateUserDto, @GetUser('userId') userId: string) {
-    return await this.userService.update(data, userId);
+    return await this.userService.update(data, data.id ?? userId);
   }
 
   @ApiOperation({ summary: '删除' })

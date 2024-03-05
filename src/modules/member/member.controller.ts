@@ -47,8 +47,11 @@ export class MemberController {
   @ApiOperation({ summary: '详情' })
   @ApiOkResponse({ type: MemberVO })
   @Get('info')
-  async findOne(@GetUser('memberId') memberId: string) {
-    return await this.memberService.findOne(memberId);
+  async findOne(
+    @Query('id') id: string,
+    @GetUser('memberId') memberId: string,
+  ) {
+    return await this.memberService.findOne(id ?? memberId);
   }
 
   @ApiOperation({ summary: '更新' })
@@ -57,7 +60,7 @@ export class MemberController {
     @Body() data: UpdateMemberDto,
     @GetUser('memberId') memberId: string,
   ) {
-    return await this.memberService.update(data, memberId);
+    return await this.memberService.update(data, data.id ?? memberId);
   }
 
   @ApiOperation({ summary: '删除' })

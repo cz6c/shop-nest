@@ -46,7 +46,7 @@ export class BannerService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 200);
+      throw new HttpException(`id为${id}的banner数据不存在`, 200);
     }
     return item;
   }
@@ -67,10 +67,21 @@ export class BannerService {
       where: { id, isDelete: false },
     });
     if (!item) {
-      throw new HttpException(`id为${id}的数据不存在`, 400);
+      throw new HttpException(`banner数据不存在`, 400);
     }
     // return await this.bannerRepository.remove(item);
     item.isDelete = true;
+    return this.bannerRepository.save(item);
+  }
+
+  async statusCheck(id: string) {
+    const item = await this.bannerRepository.findOne({
+      where: { id, isDelete: false },
+    });
+    if (!item) {
+      throw new HttpException(`id为${id}的banner数据不存在`, 400);
+    }
+    item.status = !item.status;
     return this.bannerRepository.save(item);
   }
 }

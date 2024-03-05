@@ -52,4 +52,10 @@ export class BannerController {
   async remove(@Body() data: IdDto) {
     return await this.bannerService.remove(data.id);
   }
+
+  @ApiOperation({ summary: '状态切换' })
+  @Get('statusCheck')
+  async statusCheck(@Query() params: IdDto) {
+    return await this.bannerService.statusCheck(params.id);
+  }
 }
