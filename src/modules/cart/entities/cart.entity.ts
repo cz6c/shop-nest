@@ -14,7 +14,7 @@ export class CartEntity extends CommonEntity {
   selected: boolean;
 
   /** 加入购物车价格 */
-  @Column({ default: 0 })
+  @Column({ type: 'float', precision: 2, default: 0 })
   price: number;
 
   /** 多对一sku */

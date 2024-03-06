@@ -9,5 +9,6 @@ import { MemberModule } from '../member/member.module';
   imports: [TypeOrmModule.forFeature([AddressEntity]), MemberModule],
   controllers: [AddressController],
   providers: [AddressService],
+  exports: [AddressService],
 })
 export class AddressModule {}

@@ -17,7 +17,7 @@ export class CreateAddressDto {
   @ApiProperty({ description: '收货人联系方式' })
   @IsString()
   @IsNotEmpty()
-  readonly contact: string;
+  readonly receiverMobile: string;
 
   @ApiProperty({ description: '省code' })
   @IsString()
@@ -57,7 +57,7 @@ export class AddressVO extends CommonVO {
   readonly receiver: string;
 
   @ApiPropertyOptional({ description: '收货人联系方式' })
-  readonly contact: string;
+  readonly receiverMobile: string;
 
   @ApiPropertyOptional({ description: '省对应的 code' })
   readonly provinceCode: string;

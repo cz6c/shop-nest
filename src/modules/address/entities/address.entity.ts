@@ -10,7 +10,7 @@ export class AddressEntity extends CommonEntity {
 
   /** 收货人联系方式 */
   @Column({ default: '' })
-  contact: string;
+  receiverMobile: string;
 
   /** 省code */
   @Column({ default: '' })
