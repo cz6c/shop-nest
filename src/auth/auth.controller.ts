@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Body, Get } from '@nestjs/common';
+import { Controller, Post, UseGuards, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDto, wxLoginDto } from './dto/auth.dto';
@@ -9,34 +9,29 @@ import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiBearerAuth()
 @ApiTags('验证')
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
   @ApiOperation({ summary: '后台登录' })
   @UseGuards(AuthGuard('local'))
-  @Post('login')
+  @Post('admin/login')
   async login(@Body() data: LoginDto, @GetUser() user: UserPayload) {
     return await this.authService.login(user);
   }
 
   @Public()
   @ApiOperation({ summary: '会员登录' })
-  @Post('memberLogin')
+  @Post('app/memberLogin')
   async memberLogin(@Body() data: LoginDto) {
     return await this.authService.memberLogin(data);
   }
 
   @Public()
   @ApiOperation({ summary: '微信小程序会员登录' })
-  @Post('wxLogin')
+  @Post('app/wxLogin')
   async wxLogin(@Body() data: wxLoginDto) {
     return await this.authService.wxLogin(data);
-  }
-
-  @Get('test')
-  async test(@GetUser() user: UserPayload) {
-    return user;
   }
 }

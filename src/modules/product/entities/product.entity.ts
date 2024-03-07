@@ -1,7 +1,6 @@
 import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
-import { SpecsEntity } from '@/modules/specs/entities/specs.entity';
 import { QINIU } from '#/index';
 import { CategoryEntity } from '@/modules/category/entities/category.entity';
 
@@ -76,4 +75,22 @@ export class ProductEntity extends CommonEntity {
   /** 多对一分类 */
   @ManyToOne(() => CategoryEntity, (entity) => entity.products)
   category: CategoryEntity;
+}
+
+@Entity('specs')
+export class SpecsEntity extends CommonEntity {
+  /** 规格名称 */
+  @Column({ default: '' })
+  name: string;
+
+  /** 规格值数组 */
+  @Column({
+    type: 'simple-array',
+    nullable: true,
+  })
+  options: string[];
+
+  /** 多对一商品 */
+  @ManyToOne(() => ProductEntity, (product) => product.specs)
+  product: ProductEntity;
 }

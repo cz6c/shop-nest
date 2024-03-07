@@ -16,7 +16,7 @@ import { IdDto, IdsDto } from '@/common/common.dto';
 
 @ApiTags('商品sku管理')
 @ApiBearerAuth()
-@Controller('sku')
+@Controller('admin/sku')
 export class SkuController {
   constructor(private readonly skuService: SkuService) {}
 

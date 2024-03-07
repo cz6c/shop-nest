@@ -1,21 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { UploadModule } from './upload/upload.module';
+import { UploadModule } from './shared/upload/upload.module';
+import { AreaModule } from './shared/area/area.module';
 import { CategoryModule } from './modules/category/category.module';
 import { AddressModule } from './modules/address/address.module';
 import { CartModule } from './modules/cart/cart.module';
 import { SkuModule } from './modules/sku/sku.module';
-import { SpecsModule } from './modules/specs/specs.module';
 import { ProductModule } from './modules/product/product.module';
 import { SpecificationModule } from './modules/specification/specification.module';
 import { MemberModule } from './modules/member/member.module';
 import { BannerModule } from './modules/banner/banner.module';
-import { AreaModule } from './area/area.module';
 import { OrderModule } from './modules/order/order.module';
 import envConfig from '../config/env';
 
@@ -44,19 +41,16 @@ import envConfig from '../config/env';
     UserModule,
     AuthModule,
     UploadModule,
+    AreaModule,
     CategoryModule,
     AddressModule,
     CartModule,
     SkuModule,
-    SpecsModule,
     ProductModule,
     SpecificationModule,
     MemberModule,
     BannerModule,
-    AreaModule,
     OrderModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

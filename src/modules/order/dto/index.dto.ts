@@ -1,4 +1,11 @@
-import { IsArray, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -7,16 +14,63 @@ import {
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
 import { OrderState, PayChannel } from '@/common/common.enum';
+import { AddressVO } from '@/modules/address/dto/index.dto';
 
-// 新增
-export class CreateOrderDto {
-  /** 所选地址Id */
+export class NowPreDto {
   @ApiProperty({ description: '所选地址Id' })
   @IsString()
   @IsNotEmpty()
   addressId: string;
 
-  /** 商品集合[ 商品信息 ] */
+  @ApiProperty({ description: 'skuId' })
+  @IsString()
+  skuId: string;
+
+  @ApiProperty({ description: '数量' })
+  @IsNumber()
+  count: number;
+}
+
+export class PreOrderVO {
+  /** 用户地址列表 [ 地址信息 ] */
+  address: AddressVO;
+  /** 商品集合 [ 商品信息 ] */
+  goods: {
+    /** 属性文字，例如“颜色:瓷白色 尺寸：8寸” */
+    attrsText: string;
+    /** 数量 */
+    count: number;
+    /** spuId */
+    spuId: string;
+    /** 商品名称 */
+    name: string;
+    /** 实付单价 */
+    payPrice: number;
+    /** 图片 */
+    picture: string;
+    /** SKUID */
+    skuId: string;
+    /** 实付价格小计 */
+    totalPayPrice: number;
+  }[];
+  /** 结算信息 */
+  summary: {
+    /** 商品总价 */
+    totalPrice: number;
+    /** 邮费 */
+    postFee: number;
+    /** 应付金额 */
+    totalPayPrice: number;
+  };
+}
+
+// 新增
+export class CreateOrderDto {
+  @ApiProperty({ description: '所选地址Id' })
+  @IsString()
+  @IsNotEmpty()
+  addressId: string;
+
   @ApiProperty({ description: '商品集合[ 商品信息 ]' })
   @IsNotEmpty()
   @IsArray()
@@ -27,12 +81,10 @@ export class CreateOrderDto {
     skuId: string;
   }[];
 
-  /** 订单备注 */
   @ApiProperty({ description: '订单备注' })
   @IsString()
   buyerMessage: string;
 
-  /** 支付渠道，1支付宝、2微信 */
   @ApiProperty({ description: '支付渠道，1支付宝、2微信' })
   @IsEnum(PayChannel)
   payChannel: PayChannel;
@@ -104,6 +156,7 @@ export class OrderListVO extends PaginationVO {
 export class OrderListParamsDto extends PaginationDto {
   @ApiProperty({ description: '订单编号' })
   @IsString()
+  @IsOptional()
   readonly orderNo: string;
 
   @ApiProperty({
@@ -111,9 +164,11 @@ export class OrderListParamsDto extends PaginationDto {
       '订单状态，1为待付款、2为待发货、3为待收货、4为待评价、5为已完成、6为已取消',
   })
   @IsEnum(OrderState)
+  @IsOptional()
   readonly orderState: OrderState;
 
   @ApiProperty({ description: '收货人手机' })
   @IsString()
+  @IsOptional()
   readonly receiverMobile: string;
 }

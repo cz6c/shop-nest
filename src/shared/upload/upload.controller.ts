@@ -14,7 +14,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 @ApiTags('文件上传')
-@Controller('files')
+@Controller('api/files')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 

@@ -17,7 +17,7 @@ import { IdDto } from '@/common/common.dto';
 
 @ApiTags('轮播图管理')
 @ApiBearerAuth()
-@Controller('banner')
+@Controller('admin/banner')
 export class BannerController {
   constructor(private readonly bannerService: BannerService) {}
 

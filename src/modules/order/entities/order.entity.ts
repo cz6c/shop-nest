@@ -1,7 +1,7 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/common.entity';
 import { OrderState, PayChannel } from '@/common/common.enum';
-import { OrderSkuEntity } from './orderSku.entity';
+import { MemberEntity } from '@/modules/member/entities/member.entity';
 
 @Entity('order')
 export class OrderEntity extends CommonEntity {
@@ -60,4 +60,35 @@ export class OrderEntity extends CommonEntity {
   /** 一对多 */
   @OneToMany(() => OrderSkuEntity, (entity) => entity.order)
   orderSkus: OrderSkuEntity[];
+
+  /** 多对一u */
+  @ManyToOne(() => MemberEntity, (entity) => entity.orders)
+  member: MemberEntity;
+}
+
+@Entity('order_sku')
+export class OrderSkuEntity extends CommonEntity {
+  /** 商品 id */
+  @Column({ default: '' })
+  spuId: string;
+
+  /** 商品名称 */
+  @Column({ default: '' })
+  name: string;
+
+  /** 数量 */
+  @Column({ default: 0 })
+  quantity: number;
+
+  /** 购买时单价 */
+  @Column({ type: 'float', precision: 2, default: 0 })
+  curPrice: number;
+
+  /** sku图片 */
+  @Column({ default: '' })
+  picture: string;
+
+  /** 多对一 */
+  @ManyToOne(() => OrderEntity, (entity) => entity.orderSkus)
+  order: OrderEntity;
 }

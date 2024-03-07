@@ -11,11 +11,12 @@ import {
   ApiProperty,
   ApiPropertyOptional,
   IntersectionType,
+  OmitType,
 } from '@nestjs/swagger';
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
-import { SpecsEntity } from '@/modules/specs/entities/specs.entity';
+import { ProductEntity, SpecsEntity } from '../entities/product.entity';
 
 // 新增
 export class CreateProductDto {
@@ -122,4 +123,37 @@ export class ProductListParamsDto extends PaginationDto {
   @IsOptional()
   @IsString()
   readonly name: string;
+}
+
+/** 规格 */
+// 新增
+export class CreateSpecsDto {
+  @ApiProperty({ description: '规格名称' })
+  @IsString()
+  readonly name: string;
+
+  @ApiProperty({ description: '规格值数组' })
+  @IsArray()
+  @IsString({ each: true })
+  @IsNotEmpty({ each: true })
+  readonly options: string[];
+
+  @ApiProperty({ description: '关联商品' })
+  @IsNotEmpty()
+  readonly product: ProductEntity;
+}
+
+// 更新
+export class UpdateSpecsDto extends IntersectionType(
+  IdDto,
+  OmitType(CreateSpecsDto, ['product'] as const),
+) {}
+
+// 详情
+export class SpecsVO extends CommonVO {
+  @ApiPropertyOptional({ description: '规格名称' })
+  readonly name: string;
+
+  @ApiPropertyOptional({ description: '规格值数组' })
+  readonly options: string[];
 }

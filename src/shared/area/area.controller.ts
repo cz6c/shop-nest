@@ -3,9 +3,9 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AreaService } from './area.service';
 import { AeraListParamsDto } from './dto/index.dto';
 
-@ApiTags('地址管理')
+@ApiTags('地区管理')
 @ApiBearerAuth()
-@Controller('area')
+@Controller('api/area')
 export class AreaController {
   constructor(private readonly areaService: AreaService) {}
 

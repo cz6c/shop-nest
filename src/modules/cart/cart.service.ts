@@ -2,12 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CartEntity } from './entities/cart.entity';
-import {
-  CreateCartDto,
-  UpdateCartDto,
-  CartListParamsDto,
-  CartListVO,
-} from './dto/index.dto';
+import { CreateCartDto, UpdateCartDto, CartListVO } from './dto/index.dto';
 import { MemberService } from '../member/member.service';
 import { SkuService } from '../sku/sku.service';
 
@@ -29,25 +24,16 @@ export class CartService {
     return await this.cartRepository.save(newItem);
   }
 
-  // 购物车列表
-  async findAll(
-    query: CartListParamsDto,
-    memberId: string,
-  ): Promise<CartListVO> {
-    const { page, limit } = query;
+  async findAll(memberId: string): Promise<CartListVO> {
     const where: Record<string, any> = {
-      menubar: { id: memberId },
+      member: { id: memberId },
     };
-    const skip = (page && limit && (page - 1) * limit) ?? 0;
-    const take = limit ?? 0;
-    const [list, total] = await this.cartRepository.findAndCount({
+    const list = await this.cartRepository.find({
       where,
       relations: ['sku'],
       order: { createTime: 'DESC' },
-      skip,
-      take,
     });
-    return { list, page, limit, total };
+    return { list };
   }
 
   // 更新购物车单品
@@ -73,5 +59,21 @@ export class CartService {
     // });
     // return await this.cartRepository.remove(list);
     return await this.cartRepository.delete(ids);
+  }
+
+  /**
+   * @description: 购物车勾选列表
+   * @param {string} memberId
+   */
+  async findSelectedCarts(memberId: string) {
+    const where: Record<string, any> = {
+      member: { id: memberId },
+      selected: true,
+    };
+    return await this.cartRepository.find({
+      where,
+      relations: ['sku'],
+      order: { createTime: 'DESC' },
+    });
   }
 }

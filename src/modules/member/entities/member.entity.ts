@@ -4,6 +4,7 @@ import { QINIU } from '#/index';
 import { Gender } from '@/common/common.enum';
 import { AddressEntity } from '@/modules/address/entities/address.entity';
 import { CartEntity } from '@/modules/cart/entities/cart.entity';
+import { OrderEntity } from '@/modules/order/entities/order.entity';
 
 @Entity('member')
 export class MemberEntity extends CommonEntity {
@@ -51,4 +52,8 @@ export class MemberEntity extends CommonEntity {
   /** 一对多购物车 */
   @OneToMany(() => CartEntity, (entity) => entity.member)
   carts: CartEntity[];
+
+  /** 一对多 */
+  @OneToMany(() => OrderEntity, (entity) => entity.member)
+  orders: OrderEntity[];
 }

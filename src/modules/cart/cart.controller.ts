@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -6,18 +6,13 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CartService } from './cart.service';
-import {
-  CreateCartDto,
-  UpdateCartDto,
-  CartListVO,
-  CartListParamsDto,
-} from './dto/index.dto';
+import { CreateCartDto, UpdateCartDto, CartListVO } from './dto/index.dto';
 import { IdsDto } from '@/common/common.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('购物车管理')
 @ApiBearerAuth()
-@Controller('cart')
+@Controller('app/cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
@@ -30,11 +25,8 @@ export class CartController {
   @ApiOperation({ summary: '购物车列表' })
   @ApiOkResponse({ type: CartListVO })
   @Get('list')
-  async findAll(
-    @Query() params: CartListParamsDto,
-    @GetUser('memberId') memberId: string,
-  ) {
-    return await this.cartService.findAll(params, memberId);
+  async findAll(@GetUser('memberId') memberId: string) {
+    return await this.cartService.findAll(memberId);
   }
 
   @ApiOperation({ summary: '更新购物车单品' })

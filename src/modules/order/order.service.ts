@@ -1,17 +1,19 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { OrderEntity } from './entities/order.entity';
+import { OrderEntity, OrderSkuEntity } from './entities/order.entity';
 import {
   CreateOrderDto,
   UpdateOrderDto,
   OrderVO,
   OrderListParamsDto,
   OrderListVO,
+  NowPreDto,
+  PreOrderVO,
 } from './dto/index.dto';
 import { AddressService } from '../address/address.service';
-import { OrderSkuEntity } from './entities/orderSku.entity';
 import { SkuService } from '../sku/sku.service';
+import { CartService } from '../cart/cart.service';
 
 @Injectable()
 export class OrderService {
@@ -22,18 +24,70 @@ export class OrderService {
     private readonly orderSkuRepository: Repository<OrderSkuEntity>,
     private readonly addressService: AddressService,
     private readonly skuService: SkuService,
+    private readonly cartService: CartService,
   ) {}
 
-  // 购物车结算
-  async pre(data: CreateOrderDto) {
-    const newItem = this.orderRepository.create(data);
-    return await this.orderRepository.save(newItem);
+  // 获取购物车结算订单
+  async pre(memberId: string): Promise<PreOrderVO> {
+    const carts = await this.cartService.findSelectedCarts(memberId);
+    // 商品信息
+    const skus = await Promise.all(
+      carts.map(async (c) => {
+        const skuVo = await this.skuService.findOne(c.sku.id);
+        return {
+          attrsText: skuVo.specVals.join(),
+          count: c.count,
+          spuId: skuVo.product.id,
+          name: skuVo.product.name,
+          payPrice: skuVo.price,
+          picture: skuVo.picture,
+          skuId: c.sku.id,
+          totalPayPrice: skuVo.price * c.count,
+          totalPrice: skuVo.price * c.count,
+        };
+      }),
+    );
+    const totalPrice = skus.reduce(
+      (pre, cur) => (pre += cur.payPrice * cur.count),
+      0,
+    );
+    const addressVo = await this.addressService.getDefault();
+    return {
+      address: addressVo,
+      goods: skus,
+      summary: {
+        totalPrice,
+        totalPayPrice: totalPrice,
+        postFee: 0,
+      },
+    };
   }
 
-  // 立即购买
-  async nowPre(data: CreateOrderDto) {
-    const newItem = this.orderRepository.create(data);
-    return await this.orderRepository.save(newItem);
+  // 获取立即购买订单
+  async nowPre(params: NowPreDto): Promise<PreOrderVO> {
+    const { skuId, count } = params;
+    const skuVo = await this.skuService.findOne(skuId);
+    const sku = {
+      attrsText: skuVo.specVals.join(),
+      count: count,
+      spuId: skuVo.product.id,
+      name: skuVo.product.name,
+      payPrice: skuVo.price,
+      picture: skuVo.picture,
+      skuId: skuId,
+      totalPayPrice: skuVo.price * count,
+      totalPrice: skuVo.price * count,
+    };
+    const addressVo = await this.addressService.getDefault();
+    return {
+      address: addressVo,
+      goods: [sku],
+      summary: {
+        totalPrice: sku.totalPayPrice,
+        totalPayPrice: sku.totalPrice,
+        postFee: 0,
+      },
+    };
   }
 
   // 创建订单
@@ -74,6 +128,27 @@ export class OrderService {
     };
     const newItem = this.orderRepository.create(json);
     return await this.orderRepository.save(newItem);
+  }
+
+  // 用户分页列表
+  async findAllByMemberId(
+    query: OrderListParamsDto,
+    memberId: string,
+  ): Promise<OrderListVO> {
+    const { page, limit } = query;
+    const where: Record<string, any> = {
+      isDelete: false,
+      member: { id: memberId },
+    };
+    const skip = (page && limit && (page - 1) * limit) ?? 0;
+    const take = limit ?? 0;
+    const [list, total] = await this.orderRepository.findAndCount({
+      where,
+      order: { updateTime: 'DESC' },
+      skip,
+      take,
+    });
+    return { list, page, limit, total };
   }
 
   // 分页列表

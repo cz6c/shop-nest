@@ -120,4 +120,12 @@ export class AddressService {
     }
     this.addressRepository.update(id, { isDefault: true });
   }
+
+  // 获取默认地址
+  async getDefault(): Promise<AddressVO> {
+    const item = await this.addressRepository.findOne({
+      where: { isDefault: true },
+    });
+    return item;
+  }
 }

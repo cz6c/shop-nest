@@ -1,16 +1,17 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
-import { ProductEntity } from './entities/product.entity';
+import { In, Like, Repository } from 'typeorm';
+import { ProductEntity, SpecsEntity } from './entities/product.entity';
 import {
   CreateProductDto,
   UpdateProductDto,
   ProductVO,
   ProductListParamsDto,
   ProductListVO,
+  CreateSpecsDto,
+  UpdateSpecsDto,
 } from './dto/index.dto';
 import { SkuService } from '../sku/sku.service';
-import { SpecsService } from '../specs/specs.service';
 import { CategoryService } from '../category/category.service';
 import { isEqual } from 'lodash';
 
@@ -19,8 +20,9 @@ export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+    @InjectRepository(SpecsEntity)
+    private readonly specsRepository: Repository<SpecsEntity>,
     private readonly skuService: SkuService,
-    private readonly specsService: SpecsService,
     private readonly categoryService: CategoryService,
   ) {}
 
@@ -31,9 +33,7 @@ export class ProductService {
     newItem.category = await this.categoryService.findOne(categoryId);
     const product = await this.productRepository.save(newItem);
     // 创建sku和规格
-    await this.specsService.batchCreate(
-      specs.map((spec) => ({ ...spec, product })),
-    );
+    await this.batchCreate(specs.map((spec) => ({ ...spec, product })));
     await this.skuService.batchCreate(skus.map((sku) => ({ ...sku, product })));
     return product;
   }
@@ -103,7 +103,7 @@ export class ProductService {
     const updateItem = this.productRepository.merge(item, mergeData);
     // 同步更新sku和规格/分类
     if (!isEqual(specs, item.specs)) {
-      updateItem.specs = await this.specsService.batchUpdate(specs, item);
+      updateItem.specs = await this.batchUpdate(specs, item);
     }
     if (!isEqual(skus, item.skus)) {
       updateItem.skus = await this.skuService.batchUpdate(skus, item);
@@ -137,5 +137,41 @@ export class ProductService {
     }
     item.status = !item.status;
     return this.productRepository.save(item);
+  }
+
+  /**规格 */
+
+  // 创建
+  async batchCreate(data: CreateSpecsDto[]) {
+    const newItem = this.specsRepository.create(data);
+    return await this.specsRepository.save(newItem);
+  }
+
+  async batchUpdate(data: UpdateSpecsDto[], product: ProductEntity) {
+    // 有新增则新增
+    const newdata = data.filter((c) => !c.id).map((x) => ({ ...x, product }));
+    const newItems = newdata.length ? await this.batchCreate(newdata) : [];
+    // 其他的更新
+    const updateData = data.filter((c) => c.id);
+    const updateItems = await Promise.all(
+      updateData.map(async (c) => {
+        const { id } = c;
+        const item = await this.specsRepository.findOne({
+          where: { id },
+        });
+        const updateItem = this.specsRepository.merge(item, c);
+        return await this.specsRepository.save(updateItem);
+      }),
+    );
+    return [...newItems, ...updateItems];
+  }
+
+  // 刪除
+  async deleteSpecs(ids: string[]) {
+    const items = await this.specsRepository.findBy({
+      id: In(ids),
+    });
+    items.forEach((c) => (c.isDelete = true));
+    return await this.specsRepository.save(items);
   }
 }

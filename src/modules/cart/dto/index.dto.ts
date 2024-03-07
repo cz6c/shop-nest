@@ -4,7 +4,7 @@ import {
   ApiPropertyOptional,
   IntersectionType,
 } from '@nestjs/swagger';
-import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
+import { CommonVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
 import { SkuEntity } from '@/modules/sku/entities/sku.entity';
 
@@ -42,10 +42,7 @@ export class CartVO extends CommonVO {
 }
 
 // 分页列表
-export class CartListVO extends PaginationVO {
+export class CartListVO {
   @ApiPropertyOptional({ type: [CartVO], description: '列表' })
   readonly list: CartVO[];
 }
-
-// 列表查询
-export class CartListParamsDto extends PaginationDto {}
