@@ -101,6 +101,9 @@ export class ProductVO extends CommonVO {
   @ApiPropertyOptional({ description: '主图图片集合[ 主图图片链接 ]' })
   readonly mainPictures: string[];
 
+  @ApiPropertyOptional({ description: '主图图片' })
+  readonly picture: string;
+
   @ApiPropertyOptional({ description: '商品详情图片集合[ 图片链接 ]' })
   readonly pictures: string[];
 

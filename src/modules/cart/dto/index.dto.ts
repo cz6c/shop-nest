@@ -3,6 +3,7 @@ import {
   ApiProperty,
   ApiPropertyOptional,
   IntersectionType,
+  PartialType,
 } from '@nestjs/swagger';
 import { CommonVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
@@ -19,12 +20,18 @@ export class CreateCartDto {
   readonly skuId: string;
 }
 
-// 更新
-export class UpdateCartDto extends IntersectionType(IdDto, CreateCartDto) {
-  @ApiProperty({ description: '是否选中' })
+export class CartSelectedDto {
+  @ApiPropertyOptional({ description: '是否选中' })
   @IsBoolean()
-  readonly selected: boolean;
+  readonly selected?: boolean;
 }
+
+// 更新
+export class UpdateCartDto extends IntersectionType(
+  IdDto,
+  PartialType(CreateCartDto),
+  PartialType(CartSelectedDto),
+) {}
 
 // 详情
 export class CartVO extends CommonVO {

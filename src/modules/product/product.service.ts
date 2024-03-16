@@ -59,7 +59,8 @@ export class ProductService {
     const arr = list.map((item) => {
       const categoryId = item.category?.id ?? null;
       const categoryName = item.category?.name ?? null;
-      return { ...item, categoryId, categoryName };
+      const picture = item.mainPictures[0] ?? '';
+      return { ...item, categoryId, categoryName, picture };
     });
     return { list: arr, page, limit, total };
   }
@@ -75,10 +76,12 @@ export class ProductService {
     }
     const categoryId = item.category?.id ?? null;
     const categoryName = item.category?.name ?? null;
+    const picture = item.mainPictures[0] ?? '';
     return {
       ...item,
       categoryId,
       categoryName,
+      picture,
       skus: item.skus.filter((c) => !c.isDelete),
       specs: item.specs.filter((c) => !c.isDelete),
     };

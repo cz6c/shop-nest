@@ -62,6 +62,20 @@ export class CartService {
   }
 
   /**
+   * @description: 购物车全选/取消全选
+   * @param {boolean} selected
+   * @param {string} memberId
+   * @return {*}
+   */
+  async selected(selected: boolean, memberId: string) {
+    const list = await this.cartRepository.find({
+      where: { member: { id: memberId } },
+    });
+    list.map((c) => (c.selected = selected));
+    await this.cartRepository.save(list);
+  }
+
+  /**
    * @description: 购物车勾选列表
    * @param {string} memberId
    */

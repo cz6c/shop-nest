@@ -69,7 +69,7 @@ export class CreateMemberDto {
 }
 
 export class UpdateMemberDto extends IntersectionType(
-  IdDto,
+  PartialType(IdDto),
   OmitType(PartialType(CreateMemberDto), ['username'] as const),
 ) {}
 

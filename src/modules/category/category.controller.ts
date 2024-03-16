@@ -69,10 +69,4 @@ export class CategoryControllerApp {
   async findTrees() {
     return await this.categoryService.findTrees();
   }
-
-  @ApiOperation({ summary: '通过 parentId 查子列表' })
-  @Get('list')
-  async findAllChildrenByParentId(@Query() params: CategoryListParamsDto) {
-    return await this.categoryService.findAllChildrenByParentId(params);
-  }
 }

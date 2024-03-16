@@ -1,20 +1,18 @@
 import {
   IsArray,
+  IsDate,
   IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-  IntersectionType,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
 import { OrderState, PayChannel } from '@/common/common.enum';
 import { AddressVO } from '@/modules/address/dto/index.dto';
+import { OrderSkuEntity } from '../entities/order.entity';
 
 export class NowPreDto {
   @ApiProperty({ description: '所选地址Id' })
@@ -31,28 +29,30 @@ export class NowPreDto {
   count: number;
 }
 
+export class PreOrderGoodsItem {
+  /** 属性文字，例如“颜色:瓷白色 尺寸：8寸” */
+  attrsText: string;
+  /** 数量 */
+  count: number;
+  /** spuId */
+  spuId: string;
+  /** 商品名称 */
+  name: string;
+  /** 实付单价 */
+  payPrice: number;
+  /** 图片 */
+  picture: string;
+  /** SKUID */
+  skuId: string;
+  /** 实付价格小计 */
+  totalPayPrice: number;
+}
+
 export class PreOrderVO {
   /** 用户地址列表 [ 地址信息 ] */
   address: AddressVO;
   /** 商品集合 [ 商品信息 ] */
-  goods: {
-    /** 属性文字，例如“颜色:瓷白色 尺寸：8寸” */
-    attrsText: string;
-    /** 数量 */
-    count: number;
-    /** spuId */
-    spuId: string;
-    /** 商品名称 */
-    name: string;
-    /** 实付单价 */
-    payPrice: number;
-    /** 图片 */
-    picture: string;
-    /** SKUID */
-    skuId: string;
-    /** 实付价格小计 */
-    totalPayPrice: number;
-  }[];
+  goods: PreOrderGoodsItem[];
   /** 结算信息 */
   summary: {
     /** 商品总价 */
@@ -102,8 +102,12 @@ export class CreateOrderDto {
   // readonly payMoney: number;
 }
 
-// 更新
-export class UpdateOrderDto extends IntersectionType(IdDto, CreateOrderDto) {}
+/** 取消订单 */
+export class CancelOrderDto extends IdDto {
+  @ApiProperty({ description: '取消原因' })
+  @IsString()
+  cancelReason: string;
+}
 
 // 详情
 export class OrderVO extends CommonVO {
@@ -144,22 +148,27 @@ export class OrderVO extends CommonVO {
 
   @ApiPropertyOptional({ description: '支付渠道，1支付宝、2微信' })
   readonly payChannel: PayChannel;
+
+  @ApiPropertyOptional({ description: '商品信息' })
+  readonly orderSkus: OrderSkuEntity[];
 }
 
-// 分页列表
+/** 分页列表 */
 export class OrderListVO extends PaginationVO {
   @ApiPropertyOptional({ type: [OrderVO], description: '列表' })
   readonly list: OrderVO[];
 }
 
-// 列表查询
+/** 列表查询 */
 export class OrderListParamsDto extends PaginationDto {
-  @ApiProperty({ description: '订单编号' })
+  /** 订单编号 */
+  @ApiPropertyOptional({ description: '订单编号' })
   @IsString()
   @IsOptional()
   readonly orderNo: string;
 
-  @ApiProperty({
+  /** 订单状态，1为待付款、2为待发货、3为待收货、4为待评价、5为已完成、6为已取消 */
+  @ApiPropertyOptional({
     description:
       '订单状态，1为待付款、2为待发货、3为待收货、4为待评价、5为已完成、6为已取消',
   })
@@ -167,8 +176,27 @@ export class OrderListParamsDto extends PaginationDto {
   @IsOptional()
   readonly orderState: OrderState;
 
-  @ApiProperty({ description: '收货人手机' })
+  /** 支付渠道，1支付宝、2微信 */
+  @ApiPropertyOptional({ description: '支付渠道，1支付宝、2微信' })
+  @IsEnum(PayChannel)
+  @IsOptional()
+  readonly payChannel: PayChannel;
+
+  /** 收货人手机 */
+  @ApiPropertyOptional({ description: '收货人手机' })
   @IsString()
   @IsOptional()
   readonly receiverMobile: string;
+
+  /** 下单时间开始 */
+  @ApiPropertyOptional({ description: '下单时间开始' })
+  @IsDate()
+  @IsOptional()
+  readonly createTimeStart: Date;
+
+  /** 下单时间结束 */
+  @ApiPropertyOptional({ description: '下单时间结束' })
+  @IsDate()
+  @IsOptional()
+  readonly createTimeEnd: Date;
 }

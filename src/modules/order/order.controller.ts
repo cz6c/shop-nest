@@ -8,11 +8,11 @@ import {
 import { OrderService } from './order.service';
 import {
   CreateOrderDto,
-  UpdateOrderDto,
   OrderVO,
   OrderListVO,
   OrderListParamsDto,
   NowPreDto,
+  CancelOrderDto,
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
@@ -35,12 +35,6 @@ export class OrderController {
   @Get('info')
   async findOne(@Query() params: IdDto) {
     return await this.orderService.findOne(params.id);
-  }
-
-  @ApiOperation({ summary: '订单更新' })
-  @Post('update')
-  async update(@Body() data: UpdateOrderDto) {
-    return await this.orderService.update(data);
   }
 
   @ApiOperation({ summary: '订单删除' })
@@ -68,13 +62,19 @@ export class OrderControllerApp {
     return this.orderService.nowPre(params);
   }
 
+  @ApiOperation({ summary: '获取再次购买订单' })
+  @Get('repurchase')
+  repurchase(@Query() params: IdDto) {
+    return this.orderService.repurchase(params.id);
+  }
+
   @ApiOperation({ summary: '订单创建' })
   @Post('create')
   create(@Body() data: CreateOrderDto) {
     return this.orderService.create(data);
   }
 
-  @ApiOperation({ summary: '订单分页列表' })
+  @ApiOperation({ summary: '获取订单分页列表' })
   @ApiOkResponse({ type: OrderListVO })
   @Get('list')
   async findAllByMemberId(
@@ -84,17 +84,29 @@ export class OrderControllerApp {
     return await this.orderService.findAllByMemberId(params, memberId);
   }
 
-  @ApiOperation({ summary: '订单详情' })
+  @ApiOperation({ summary: '获取订单详情' })
   @ApiOkResponse({ type: OrderVO })
   @Get('info')
   async findOne(@Query() params: IdDto) {
     return await this.orderService.findOne(params.id);
   }
 
-  @ApiOperation({ summary: '订单更新' })
-  @Post('update')
-  async update(@Body() data: UpdateOrderDto) {
-    return await this.orderService.update(data);
+  @ApiOperation({ summary: '获取订单物流信息' })
+  @Get('logistics')
+  async logistics(@Query() params: IdDto) {
+    return await this.orderService.logistics(params.id);
+  }
+
+  @ApiOperation({ summary: '确认收货' })
+  @Post('receipt')
+  async receipt(@Body() data: IdDto) {
+    return await this.orderService.receipt(data.id);
+  }
+
+  @ApiOperation({ summary: '订单取消' })
+  @Post('cancel')
+  async cancel(@Body() data: CancelOrderDto) {
+    return await this.orderService.cancel(data);
   }
 
   @ApiOperation({ summary: '订单删除' })

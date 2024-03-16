@@ -2,7 +2,7 @@ import { IsOptional, IsPositive, IsInt, IsUUID } from 'class-validator';
 import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
 
 /**
- * @description: 列表
+ * @description: 分页列表Dto
  */
 export class PaginationDto {
   @ApiPropertyOptional({ description: '页数' })
@@ -18,6 +18,9 @@ export class PaginationDto {
   readonly limit: number;
 }
 
+/**
+ * @description: 分页列表VO
+ */
 export class PaginationVO {
   @ApiPropertyOptional({ description: '页数' })
   readonly page: number;

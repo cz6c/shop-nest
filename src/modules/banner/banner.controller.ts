@@ -59,3 +59,17 @@ export class BannerController {
     return await this.bannerService.statusCheck(params.id);
   }
 }
+
+@ApiTags('轮播图管理')
+@ApiBearerAuth()
+@Controller('app/banner')
+export class BannerControllerApp {
+  constructor(private readonly bannerService: BannerService) {}
+
+  @ApiOperation({ summary: '分页列表' })
+  @ApiOkResponse({ type: BannerListVO })
+  @Get('list')
+  async findAll(@Query() params: BannerListParamsDto) {
+    return await this.bannerService.findAll(params);
+  }
+}

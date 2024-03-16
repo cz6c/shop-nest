@@ -6,7 +6,12 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CartService } from './cart.service';
-import { CreateCartDto, UpdateCartDto, CartListVO } from './dto/index.dto';
+import {
+  CreateCartDto,
+  UpdateCartDto,
+  CartListVO,
+  CartSelectedDto,
+} from './dto/index.dto';
 import { IdsDto } from '@/common/common.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
 
@@ -39,5 +44,14 @@ export class CartController {
   @Post('delete')
   async delete(@Body() data: IdsDto) {
     return await this.cartService.delete(data.ids);
+  }
+
+  @ApiOperation({ summary: '购物车全选/取消全选' })
+  @Post('selected')
+  async selected(
+    @Body() data: CartSelectedDto,
+    @GetUser('memberId') memberId: string,
+  ) {
+    return await this.cartService.selected(data.selected, memberId);
   }
 }

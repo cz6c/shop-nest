@@ -11,7 +11,6 @@ import {
   UpdateAddressDto,
   AddressVO,
   AddressListVO,
-  AddressListParamsDto,
 } from './dto/index.dto';
 import { IdDto } from '@/common/common.dto';
 import { GetUser } from '@/decorator/getUser.decorator';
@@ -34,11 +33,8 @@ export class AddressController {
   @ApiOperation({ summary: '收货地址列表' })
   @ApiOkResponse({ type: AddressListVO })
   @Get('list')
-  async findAll(
-    @Query() params: AddressListParamsDto,
-    @GetUser('memberId') memberId: string,
-  ) {
-    return await this.addressService.findAll(params, memberId);
+  async findAll(@GetUser('memberId') memberId: string) {
+    return await this.addressService.findAll(memberId);
   }
 
   @ApiOperation({ summary: '收货地址详情' })

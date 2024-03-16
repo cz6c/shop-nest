@@ -4,7 +4,7 @@ import {
   ApiPropertyOptional,
   IntersectionType,
 } from '@nestjs/swagger';
-import { CommonVO, PaginationDto, PaginationVO } from '@/common/common.dto';
+import { CommonVO } from '@/common/common.dto';
 import { IdDto } from '@/common/common.dto';
 
 // 新增
@@ -75,11 +75,8 @@ export class AddressVO extends CommonVO {
   readonly isDefault: boolean;
 }
 
-// 分页列表
-export class AddressListVO extends PaginationVO {
+// 列表
+export class AddressListVO {
   @ApiPropertyOptional({ type: [AddressVO], description: '列表' })
   readonly list: AddressVO[];
 }
-
-// 列表查询
-export class AddressListParamsDto extends PaginationDto {}

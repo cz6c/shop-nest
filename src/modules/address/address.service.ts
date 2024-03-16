@@ -6,7 +6,6 @@ import {
   CreateAddressDto,
   UpdateAddressDto,
   AddressVO,
-  AddressListParamsDto,
   AddressListVO,
 } from './dto/index.dto';
 import { MemberService } from '../member/member.service';
@@ -40,24 +39,16 @@ export class AddressService {
   }
 
   // 收货地址列表
-  async findAll(
-    query: AddressListParamsDto,
-    memberId: string,
-  ): Promise<AddressListVO> {
-    const { page, limit } = query;
+  async findAll(memberId: string): Promise<AddressListVO> {
     const where: Record<string, any> = {
       isDelete: false,
       member: { id: memberId },
     };
-    const skip = (page && limit && (page - 1) * limit) ?? 0;
-    const take = limit ?? 0;
-    const [list, total] = await this.addressRepository.findAndCount({
+    const list = await this.addressRepository.find({
       where,
       order: { updateTime: 'DESC', isDefault: 'DESC' },
-      skip,
-      take,
     });
-    return { list, page, limit, total };
+    return { list };
   }
 
   // 收货地址详情

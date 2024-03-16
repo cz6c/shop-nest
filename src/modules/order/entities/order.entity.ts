@@ -57,6 +57,10 @@ export class OrderEntity extends CommonEntity {
   })
   payChannel: PayChannel;
 
+  /** 订单取消原因 */
+  @Column({ default: '' })
+  cancelReason: string;
+
   /** 一对多 */
   @OneToMany(() => OrderSkuEntity, (entity) => entity.order)
   orderSkus: OrderSkuEntity[];
@@ -72,7 +76,7 @@ export class OrderSkuEntity extends CommonEntity {
   @Column({ default: '' })
   spuId: string;
 
-  /** 商品名称 */
+  /** 购买时商品名称 */
   @Column({ default: '' })
   name: string;
 
@@ -80,11 +84,15 @@ export class OrderSkuEntity extends CommonEntity {
   @Column({ default: 0 })
   quantity: number;
 
+  /** sku id */
+  @Column({ default: '' })
+  skuId: string;
+
   /** 购买时单价 */
   @Column({ type: 'float', precision: 2, default: 0 })
   curPrice: number;
 
-  /** sku图片 */
+  /** 购买时sku图片 */
   @Column({ default: '' })
   picture: string;
 
