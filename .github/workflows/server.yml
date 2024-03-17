@@ -35,7 +35,7 @@ jobs:
           # 用户
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           # 目标地址
-          TARGET: '/www/wwwroot/api.cz6hy9.top'
+          TARGET: '/www/wwwroot/shop'
 
       # 安装依赖、重启服务
       - name: Server Reload
@@ -45,9 +45,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /www/wwwroot/api.cz6hy9.top
+            cd /www/wwwroot/shop
             pnpm i
             pnpm run build
-            cp /www/wwwroot/cz-nest/.env.prod /www/wwwroot/api.cz6hy9.top
+            cp /www/wwwroot/cz-nest/.env.prod /www/wwwroot/shop
             pm2 delete nest_app
             pm2 start ecosystem.config.js --env production
