@@ -37,7 +37,8 @@ jobs:
           # 目标地址
           TARGET: '/www/wwwroot/shop_app'
 
-      # 安装依赖、重启服务
+      # 安装依赖、重启服务 
+      # 注意：第一次cicd注释 pm2 delete xxx
       - name: Server Reload
         uses: appleboy/ssh-action@master
         with:
@@ -49,6 +50,5 @@ jobs:
             pnpm i
             pnpm run build
             cp /www/wwwroot/shop_config/.env.prod /www/wwwroot/shop_app
-      # 注意：第一次cicd注释下面一行代码
             pm2 delete shop_app
             pm2 start ecosystem.config.js --env production
