@@ -49,5 +49,5 @@ jobs:
             pnpm i
             pnpm run build
             cp /www/wwwroot/cz-nest/.env.prod /www/wwwroot/shop
-            pm2 delete nest_app
+            pm2 delete shop_app
             pm2 start ecosystem.config.js --env production
