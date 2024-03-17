@@ -49,5 +49,6 @@ jobs:
             pnpm i
             pnpm run build
             cp /www/wwwroot/shop_config/.env.prod /www/wwwroot/shop_app
-            # pm2 delete shop_app
+      # 注意：第一次cicd注释下面一行代码
+            pm2 delete shop_app
             pm2 start ecosystem.config.js --env production
