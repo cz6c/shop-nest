@@ -20,7 +20,7 @@ import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('用户管理')
 @ApiBearerAuth()
-@Controller('admin/user')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

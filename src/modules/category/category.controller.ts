@@ -16,7 +16,7 @@ import { IdDto } from '@/common/common.dto';
 
 @ApiTags('商品分类管理')
 @ApiBearerAuth()
-@Controller('admin/category')
+@Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
@@ -55,18 +55,5 @@ export class CategoryController {
   @Post('delete')
   async remove(@Body() data: IdDto) {
     return await this.categoryService.remove(data.id);
-  }
-}
-
-@ApiTags('商品分类管理')
-@ApiBearerAuth()
-@Controller('app/category')
-export class CategoryControllerApp {
-  constructor(private readonly categoryService: CategoryService) {}
-
-  @ApiOperation({ summary: 'trees列表' })
-  @Get('trees')
-  async findTrees() {
-    return await this.categoryService.findTrees();
   }
 }

@@ -17,7 +17,7 @@ import { IdDto } from '@/common/common.dto';
 
 @ApiTags('规格模版管理')
 @ApiBearerAuth()
-@Controller('admin/specification')
+@Controller('specification')
 export class SpecificationController {
   constructor(private readonly specificationService: SpecificationService) {}
 

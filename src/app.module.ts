@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService, ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { UserModule } from './shared/user/user.module';
+import { AuthModule } from './shared/auth/auth.module';
 import { UploadModule } from './shared/upload/upload.module';
 import { AreaModule } from './shared/area/area.module';
 import { CategoryModule } from './modules/category/category.module';

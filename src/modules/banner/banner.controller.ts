@@ -17,7 +17,7 @@ import { IdDto } from '@/common/common.dto';
 
 @ApiTags('轮播图管理')
 @ApiBearerAuth()
-@Controller('admin/banner')
+@Controller('banner')
 export class BannerController {
   constructor(private readonly bannerService: BannerService) {}
 
@@ -57,19 +57,5 @@ export class BannerController {
   @Get('statusCheck')
   async statusCheck(@Query() params: IdDto) {
     return await this.bannerService.statusCheck(params.id);
-  }
-}
-
-@ApiTags('轮播图管理')
-@ApiBearerAuth()
-@Controller('app/banner')
-export class BannerControllerApp {
-  constructor(private readonly bannerService: BannerService) {}
-
-  @ApiOperation({ summary: '分页列表' })
-  @ApiOkResponse({ type: BannerListVO })
-  @Get('list')
-  async findAll(@Query() params: BannerListParamsDto) {
-    return await this.bannerService.findAll(params);
   }
 }

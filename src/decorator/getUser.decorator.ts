@@ -1,4 +1,4 @@
-import { UserPayload } from '@/auth/dto/auth.dto';
+import { UserPayload } from '@/shared/auth/dto/auth.dto';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const GetUser = createParamDecorator(
