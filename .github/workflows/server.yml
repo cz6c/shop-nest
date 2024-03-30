@@ -20,22 +20,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-
-      - name: Install And build
-        run: |
-          pnpm install
-          pnpm run build
-
       # 拷贝文件到服务器指定目录
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
@@ -45,7 +29,7 @@ jobs:
           # SCP参数
           ARGS: '-avzr --delete'
           # 源目录
-          SOURCE: 'dist/ pm2/'
+          SOURCE: '/'
           # 服务器ip
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           # 用户
@@ -61,7 +45,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cp /www/wwwroot/shop_app/.env.prod /www/wwwroot/shop_app/server
             cd /www/wwwroot/shop_app/server
+            pnpm install
+            pnpm run build
             if pm2 list | grep -q "shop_app"; then
               pm2 delete shop_app
             fi
