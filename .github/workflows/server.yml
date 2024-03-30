@@ -64,8 +64,7 @@ jobs:
             cp /www/wwwroot/shop_app/.env.prod /www/wwwroot/shop_app
             cd /www/wwwroot/shop_app
             if pm2 list | grep -q "shop_app"; then
-              pm2 restart shop_app
-            else
+              pm2 delete shop_app
+            fi
               pm2 start ecosystem.config.js --env production
               pm2 save
-            fi
