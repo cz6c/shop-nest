@@ -65,5 +65,5 @@ jobs:
             if pm2 list | grep -q "shop_app"; then
               pm2 delete shop_app
             fi
-              pm2 start ecosystem.config.js --env production
-              pm2 save
+            pm2 start ecosystem.config.js --env production
+            pm2 save
