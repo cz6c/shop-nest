@@ -18,17 +18,17 @@ jobs:
     steps:
       # 官方action，将代码拉取到虚拟机
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
 
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "18.18.0"
+          node-version: "20"
           cache: "pnpm"
 
       - name: Install And build
@@ -45,7 +45,7 @@ jobs:
           # SCP参数
           ARGS: '-avzr --delete'
           # 源目录
-          SOURCE: 'dist/'
+          SOURCE: 'dist/ pm2/'
           # 服务器ip
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           # 用户
@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /www/wwwroot/shop_app
+            cd /www/wwwroot/shop_app/server
             if pm2 list | grep -q "shop_app"; then
               pm2 delete shop_app
             fi
