@@ -17,7 +17,7 @@ import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('收货地址管理')
 @ApiBearerAuth()
-@Controller('address')
+@Controller('app/address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 

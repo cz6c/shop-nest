@@ -20,7 +20,7 @@ import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('会员管理')
 @ApiBearerAuth()
-@Controller('member')
+@Controller('admin/member')
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
@@ -61,11 +61,43 @@ export class MemberController {
   async remove(@Body() data: IdDto) {
     return await this.memberService.remove(data.id);
   }
+}
+
+@ApiTags('会员管理')
+@ApiBearerAuth()
+@Controller('app/member')
+export class MemberControllerApp {
+  constructor(private readonly memberService: MemberService) {}
 
   @Public()
   @ApiOperation({ summary: '注册' })
   @Post('register')
   register(@Body() data: RegisterMemberDto) {
     return this.memberService.register(data);
+  }
+
+  @ApiOperation({ summary: '详情' })
+  @ApiOkResponse({ type: MemberVO })
+  @Get('info')
+  async findOne(
+    @Query('id') id: string,
+    @GetUser('memberId') memberId: string,
+  ) {
+    return await this.memberService.findOne(id ?? memberId);
+  }
+
+  @ApiOperation({ summary: '更新' })
+  @Post('update')
+  async update(
+    @Body() data: UpdateMemberDto,
+    @GetUser('memberId') memberId: string,
+  ) {
+    return await this.memberService.update(data, data.id ?? memberId);
+  }
+
+  @ApiOperation({ summary: '注销' })
+  @Post('delete')
+  async remove(@Body() data: IdDto) {
+    return await this.memberService.remove(data.id);
   }
 }

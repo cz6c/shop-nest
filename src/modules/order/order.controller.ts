@@ -19,7 +19,7 @@ import { GetUser } from '@/decorator/getUser.decorator';
 
 @ApiTags('订单管理')
 @ApiBearerAuth()
-@Controller('order')
+@Controller('admin/order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
@@ -42,6 +42,13 @@ export class OrderController {
   async remove(@Body() data: IdDto) {
     return await this.orderService.remove(data.id);
   }
+}
+
+@ApiTags('订单管理')
+@ApiBearerAuth()
+@Controller('app/order')
+export class OrderControllerApp {
+  constructor(private readonly orderService: OrderService) {}
 
   @ApiOperation({ summary: '获取购物车结算订单' })
   @Get('pre')
@@ -77,6 +84,13 @@ export class OrderController {
     return await this.orderService.findAllByMemberId(params, memberId);
   }
 
+  @ApiOperation({ summary: '获取订单详情' })
+  @ApiOkResponse({ type: OrderVO })
+  @Get('info')
+  async findOne(@Query() params: IdDto) {
+    return await this.orderService.findOne(params.id);
+  }
+
   @ApiOperation({ summary: '获取订单物流信息' })
   @Get('logistics')
   async logistics(@Query() params: IdDto) {
@@ -93,5 +107,11 @@ export class OrderController {
   @Post('cancel')
   async cancel(@Body() data: CancelOrderDto) {
     return await this.orderService.cancel(data);
+  }
+
+  @ApiOperation({ summary: '订单删除' })
+  @Post('delete')
+  async remove(@Body() data: IdDto) {
+    return await this.orderService.remove(data.id);
   }
 }

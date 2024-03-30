@@ -17,7 +17,7 @@ import { IdDto, IdsDto } from '@/common/common.dto';
 
 @ApiTags('商品管理')
 @ApiBearerAuth()
-@Controller('product')
+@Controller('admin/product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
@@ -63,5 +63,26 @@ export class ProductController {
   @Post('deleteSpecs')
   async removes(@Body() data: IdsDto) {
     return await this.productService.deleteSpecs(data.ids);
+  }
+}
+
+@ApiTags('商品管理')
+@ApiBearerAuth()
+@Controller('app/product')
+export class ProductControllerApp {
+  constructor(private readonly productService: ProductService) {}
+
+  @ApiOperation({ summary: '分页列表' })
+  @ApiOkResponse({ type: ProductListVO })
+  @Get('list')
+  async findAll(@Query() params: ProductListParamsDto) {
+    return await this.productService.findAll(params);
+  }
+
+  @ApiOperation({ summary: '详情' })
+  @ApiOkResponse({ type: ProductVO })
+  @Get('info')
+  async findOne(@Query() params: IdDto) {
+    return await this.productService.findOne(params.id);
   }
 }
