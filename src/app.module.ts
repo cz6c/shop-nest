@@ -14,7 +14,7 @@ import { SpecificationModule } from './modules/specification/specification.modul
 import { MemberModule } from './modules/member/member.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { OrderModule } from './modules/order/order.module';
-import envConfig from '../config/env';
+import envConfig from './utils/env';
 
 @Module({
   imports: [

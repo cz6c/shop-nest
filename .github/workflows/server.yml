@@ -20,6 +20,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.19.1"
+          cache: "pnpm"
+
+      - name: Install And build
+        run: |
+          pnpm install
+          pnpm run build
+
       # 拷贝文件到服务器指定目录
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
@@ -29,16 +45,15 @@ jobs:
           # SCP参数
           ARGS: '-avzr --delete'
           # 源目录
-          SOURCE: '/'
+          SOURCE: 'dist/'
           # 服务器ip
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           # 用户
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           # 目标地址
-          TARGET: '/www/wwwroot/shop_app'
+          TARGET: '/www/wwwroot/shop_app/server'
 
       # 安装依赖、重启服务 
-      # 注意：第一次cicd注释 pm2 delete xxx
       - name: Server Reload
         uses: appleboy/ssh-action@master
         with:
@@ -46,9 +61,11 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cp /www/wwwroot/shop_app/.env.prod /www/wwwroot/shop_app
             cd /www/wwwroot/shop_app
-            pnpm i
-            pnpm run build
-            cp /www/wwwroot/shop_config/.env.prod /www/wwwroot/shop_app
-            pm2 delete shop_app
-            pm2 start ecosystem.config.js --env production
+            if pm2 list | grep -q "shop_app"; then
+              pm2 restart shop_app
+            else
+              pm2 start ecosystem.config.js --env production
+              pm2 save
+            fi

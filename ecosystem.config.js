@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'shop_app',
-      script: './dist/src/main.js',
+      script: './server/src/main.js',
       env: {
         NODE_ENV: 'development',
       },
