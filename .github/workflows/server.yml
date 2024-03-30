@@ -50,6 +50,7 @@ jobs:
             cd /www/wwwroot/shop_app/server
             pnpm install
             pnpm run build
+            cd ..
             if pm2 list | grep -q "shop_app"; then
               pm2 delete shop_app
             fi
