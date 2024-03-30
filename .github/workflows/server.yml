@@ -38,6 +38,7 @@ jobs:
           TARGET: '/www/wwwroot/shop_app/server'
 
       # 安装依赖、重启服务 
+      # 注意：第一次cicd注释 pm2 delete xxx
       - name: Server Reload
         uses: appleboy/ssh-action@master
         with:
