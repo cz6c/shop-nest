@@ -61,7 +61,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cp /www/wwwroot/shop_app/.env.prod /www/wwwroot/shop_app
             cd /www/wwwroot/shop_app
             if pm2 list | grep -q "shop_app"; then
               pm2 delete shop_app
