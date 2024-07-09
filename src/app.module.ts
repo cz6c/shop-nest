@@ -1,56 +1,105 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module, Global } from '@nestjs/common';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService, ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { UploadModule } from './shared/upload/upload.module';
-import { AreaModule } from './shared/area/area.module';
-import { CategoryModule } from './modules/category/category.module';
-import { AddressModule } from './modules/address/address.module';
-import { CartModule } from './modules/cart/cart.module';
-import { SkuModule } from './modules/sku/sku.module';
-import { ProductModule } from './modules/product/product.module';
-import { SpecificationModule } from './modules/specification/specification.module';
-import { MemberModule } from './modules/member/member.module';
-import { BannerModule } from './modules/banner/banner.module';
-import { OrderModule } from './modules/order/order.module';
-import envConfig from '../config/env';
+import configuration from './config/index';
+import { HttpModule } from '@nestjs/axios';
+import { RedisClientOptions } from '@liaoliaots/nestjs-redis';
+import { RedisModule } from './modules/redis/redis.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from 'src/common/guards/auth.guard';
+import { PermissionGuard } from 'src/common/guards/permission.guard';
+import { RolesGuard } from './common/guards/roles.guard';
+import { AreaModule } from './modules/area/area.module';
+import { UploadModule } from './modules/upload/upload.module';
 
+import { AuthModule } from './modules/system/auth/auth.module';
+import { UserModule } from './modules/system/user/user.module';
+import { DeptModule } from './modules/system/dept/dept.module';
+import { DictModule } from './modules/system/dict/dict.module';
+import { MenuModule } from './modules/system/menu/menu.module';
+import { RoleModule } from './modules/system/role/role.module';
+import { PostModule } from './modules/system/post/post.module';
+import { SysConfigModule } from './modules/system/config/config.module';
+import { NoticeModule } from './modules/system/notice/notice.module';
+import { MainModule } from './modules/main/main.module';
+import { CacheModule } from './modules/monitor/cache/cache.module';
+import { LoginlogModule } from './modules/monitor/loginlog/loginlog.module';
+import { OperlogModule } from './modules/monitor/operlog/operlog.module';
+import { AxiosModule } from './modules/axios/axios.module';
+import { OnlineModule } from './modules/monitor/online/online.module';
+import { ServerModule } from './modules/monitor/server/server.module';
+
+@Global()
 @Module({
   imports: [
+    // 配置模块
     ConfigModule.forRoot({
+      cache: true,
+      load: [configuration],
       isGlobal: true, // 设置为全局
-      envFilePath: [envConfig.path],
     }),
+    // 数据库
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'mysql', // 数据库类型
-        autoLoadEntities: true, // 自动导入实体
-        // entities: [], // 数据表实体
-        host: configService.get('DB_HOST', 'localhost'), // 主机，默认为localhost
-        port: configService.get<number>('DB_PORT', 3306), // 端口号
-        username: configService.get('DB_USER', 'root'), // 用户名
-        password: configService.get('DB_PASSWORD', '123456'), // 密码
-        database: configService.get('DB_DATABASE', 'blog'), //数据库名
-        // timezone: '+08:00', //服务器上配置的时区
-        synchronize: true, //根据实体自动创建数据库表， 生产环境建议关闭
-      }),
+      useFactory: async (config: ConfigService) =>
+        ({
+          type: 'mysql',
+          autoLoadEntities: true, // 自动导入实体
+          keepConnectionAlive: true,
+          timezone: '+08:00', //服务器上配置的时区
+          ...config.get('db.mysql'),
+        }) as TypeOrmModuleOptions,
     }),
-    UserModule,
-    AuthModule,
-    UploadModule,
+    // redis
+    RedisModule.forRootAsync(
+      {
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => {
+          return {
+            closeClient: true,
+            readyLog: true,
+            errorLog: true,
+            config: config.get<RedisClientOptions>('redis'),
+          };
+        },
+      },
+      true,
+    ),
+    HttpModule,
     AreaModule,
-    CategoryModule,
-    AddressModule,
-    CartModule,
-    SkuModule,
-    ProductModule,
-    SpecificationModule,
-    MemberModule,
-    BannerModule,
-    OrderModule,
+    UploadModule,
+    AuthModule,
+    UserModule,
+    DeptModule,
+    DictModule,
+    MenuModule,
+    RoleModule,
+    PostModule,
+    SysConfigModule,
+    NoticeModule,
+    MainModule,
+    CacheModule,
+    LoginlogModule,
+    OperlogModule,
+    AxiosModule,
+    OnlineModule,
+    ServerModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
   ],
 })
 export class AppModule {}
