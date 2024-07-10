@@ -15,9 +15,9 @@ import { CreateUserDto, UpdateUserDto, ListUserDto, ChangeStatusDto, ResetPwdDto
 import { RegisterDto, LoginDto, ClientInfoDto } from '../../main/dto/index';
 import { AuthUserCancelDto, AuthUserCancelAllDto, AuthUserSelectAllDto } from '../role/dto/index';
 
-import { UserEntity } from './entities/sys-user.entity';
-import { SysUserWithPostEntity } from './entities/user-with-post.entity';
-import { SysUserWithRoleEntity } from './entities/user-with-role.entity';
+import { UserEntity } from './entities/user.entity';
+import { SysUserWithPostEntity } from './entities/user-post.entity';
+import { SysUserWithRoleEntity } from './entities/user-role.entity';
 import { SysPostEntity } from '../post/entities/post.entity';
 import { SysDeptEntity } from '../dept/entities/dept.entity';
 import { RoleService } from '../role/role.service';

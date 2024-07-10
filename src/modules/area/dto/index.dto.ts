@@ -1,15 +1,10 @@
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { AreaEntity } from '../entities/area.entity';
 
-export class AeraVO {
-  @ApiPropertyOptional({ description: '名称' })
-  readonly name: string;
-
-  @ApiPropertyOptional({ description: 'code' })
-  readonly code: string;
-
-  @ApiPropertyOptional({ description: 'children' })
-  readonly children?: AeraVO[];
+export class AeraVO extends AreaEntity {
+  @ApiPropertyOptional({ type: [AreaEntity], description: 'children' })
+  readonly children: AreaEntity[];
 }
 
 // 列表查询

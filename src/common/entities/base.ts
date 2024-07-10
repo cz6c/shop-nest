@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
-
 import { ApiProperty } from '@nestjs/swagger';
+
 //基础实体信息
 @Entity()
 export abstract class BaseEntity {

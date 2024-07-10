@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { pathToRegexp } from 'path-to-regexp';
 import { ExecutionContext, ForbiddenException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '@/modules/system/user/user.service';
+import * as url from 'url';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -41,11 +42,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    */
   checkWhiteList(ctx: ExecutionContext): boolean {
     const req = ctx.switchToHttp().getRequest();
+    const pathname = url.parse(req.url).pathname;
+    console.log('🚀 ~ JwtAuthGuard ~ checkWhiteList ~ pathname:', pathname);
     const i = this.globalWhiteList.findIndex((route) => {
       // 请求方法类型相同
       if (req.method.toUpperCase() === route.method.toUpperCase()) {
         // 对比 url
-        return !!pathToRegexp(route.path).exec(req.url);
+        return !!pathToRegexp(route.path).exec(pathname);
       }
       return false;
     });

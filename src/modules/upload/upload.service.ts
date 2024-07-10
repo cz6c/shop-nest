@@ -6,14 +6,22 @@ import { ResultData } from '@/common/utils/result';
 import { SysUploadEntity } from './entities/upload.entity';
 import { ChunkFileDto, ChunkMergeFileDto } from './dto/index';
 import { GenerateUUID } from '@/common/utils/index';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import iconv from 'iconv-lite';
-import COS from 'cos-nodejs-sdk-v5';
+import * as COS from 'cos-nodejs-sdk-v5';
 
 @Injectable()
 export class UploadService {
-  private cos: any;
+  private cos = new COS({
+    // 必选参数
+    SecretId: this.config.get('cos.secretId'),
+    SecretKey: this.config.get('cos.secretKey'),
+    //可选参数
+    FileParallelLimit: 3, // 控制文件上传并发数
+    ChunkParallelLimit: 8, // 控制单个文件下分片上传并发数，在同园区上传可以设置较大的并发数
+    ChunkSize: 1024 * 1024 * 8, // 控制分片大小，单位 B，在同园区上传可以设置较大的分片大小
+  });
   private thunkDir: string;
   private isLocal: boolean;
   constructor(
@@ -22,15 +30,6 @@ export class UploadService {
     @Inject(ConfigService)
     private config: ConfigService,
   ) {
-    // this.cos = new COS({
-    //   // 必选参数
-    //   SecretId: this.config.get('cos.secretId'),
-    //   SecretKey: this.config.get('cos.secretKey'),
-    //   //可选参数
-    //   FileParallelLimit: 3, // 控制文件上传并发数
-    //   ChunkParallelLimit: 8, // 控制单个文件下分片上传并发数，在同园区上传可以设置较大的并发数
-    //   ChunkSize: 1024 * 1024 * 8, // 控制分片大小，单位 B，在同园区上传可以设置较大的分片大小
-    // });
     this.thunkDir = 'thunk';
     this.isLocal = this.config.get('app.file.isLocal');
   }

@@ -140,15 +140,15 @@ export class DictService {
     // });
 
     // 尝试从Redis缓存中获取字典数据
-    let data = await this.redisService.get(`${CacheEnum.SYS_DICT_KEY}${dictType}`);
+    // let data = await this.redisService.get(`${CacheEnum.SYS_DICT_KEY}${dictType}`);
 
-    if (data) {
-      // 如果缓存中存在，则直接返回缓存数据
-      return ResultData.ok(data);
-    }
+    // if (data) {
+    //   // 如果缓存中存在，则直接返回缓存数据
+    //   return ResultData.ok(data);
+    // }
 
     // 从数据库中查询字典数据
-    data = await this.sysDictDataEntityRep.find({
+    const data = await this.sysDictDataEntityRep.find({
       where: {
         dictType: dictType,
         delFlag: '0',

@@ -9,10 +9,7 @@ export class ServerController {
   @ApiOperation({
     summary: '在线用户-列表',
   })
-  @ApiResponse({
-    status: 200,
-    description: '返回成功',
-  })
+  @ApiResponse({ status: 200, description: '返回成功' })
   @Get()
   getInfo() {
     return this.serverService.getInfo();

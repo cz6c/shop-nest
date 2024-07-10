@@ -14,18 +14,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const { message } = exceptionResponse as { message: string[] | string };
       validatorMessage = Array.isArray(message) ? message[0] : message;
     }
-    console.log(exceptionResponse, 'exceptionResponse');
-    console.log(validatorMessage, 'validatorMessage');
 
-    const errorResponse = {
-      data: null,
+    response.status(200).json({
+      code: status,
       message: validatorMessage || `${status >= 500 ? 'Service Error' : 'Client Error'}`,
-      code: -1,
-    };
-
-    // 设置返回的状态码， 请求头，发送错误信息
-    response.status(status);
-    response.header('Content-Type', 'application/json; charset=utf-8');
-    response.send(errorResponse);
+      data: null,
+    });
   }
 }

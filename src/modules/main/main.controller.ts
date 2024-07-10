@@ -10,7 +10,7 @@ import { RedisService } from '@/modules/redis/redis.service';
 import { CacheEnum } from '@/common/enum/index';
 import { ConfigService } from '@/modules/system/config/config.service';
 
-@ApiTags('根目录')
+@ApiTags('登录鉴权')
 @Controller('/')
 export class MainController {
   constructor(

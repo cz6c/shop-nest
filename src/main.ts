@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/core/filter/http-exception/http-exception.filter';
-import { TransformInterceptor } from './common/core/interceptor/transform/transform.interceptor';
+import { HttpExceptionFilter } from './common/core/filter/http-exception.filter';
+import { ExceptionsFilter } from './common/core/filter/exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -30,9 +30,10 @@ async function bootstrap() {
 
   // 注册全局过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new ExceptionsFilter());
 
   // 注册全局拦截器
-  app.useGlobalInterceptors(new TransformInterceptor());
+  // app.useGlobalInterceptors(new TransformInterceptor());
 
   // 注册全局管道
   app.useGlobalPipes(
@@ -65,6 +66,7 @@ async function bootstrap() {
   const port = config.get<number>('app.port') || 3000;
   await app.listen(port);
 
-  console.log(`服务启动成功 `, '\n', '\n', '服务地址', `http://localhost:${port}${prefix}/`, '\n', 'swagger 文档地址        ', `http://localhost:${port}${prefix}/swagger-ui/`);
+  console.log(`➜  服务地址：    http://localhost:${port}${prefix}/`);
+  console.log(`➜  swagger地址： http://localhost:${port}${prefix}/swagger-ui/`);
 }
 bootstrap();

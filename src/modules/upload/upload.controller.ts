@@ -4,7 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { ChunkFileDto, ChunkMergeFileDto, FileUploadDto, uploadIdDto } from './dto/index';
 
-@ApiTags('通用-文件上传')
+@ApiTags('通用')
 @Controller('common/upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}

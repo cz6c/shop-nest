@@ -1,4 +1,4 @@
-import { IsDateString, IsNumberString, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -17,11 +17,11 @@ export class DateParamsDTO {
  */
 export class PagingDto {
   @ApiProperty({ required: false })
-  @IsNumberString()
+  @IsNumber()
   pageNum: number;
 
   @ApiProperty({ required: false })
-  @IsNumberString()
+  @IsNumber()
   pageSize: number;
 
   /**

@@ -65,8 +65,8 @@ perm:
         { path: '/register', method: 'POST' },
         { path: '/login', method: 'POST' },
         { path: '/logout', method: 'POST' },
-        { path: '/perm/{id}', method: 'GET' },
-        { path: '/upload', method: 'POST' },
+        { path: '/common/area/list', method: 'GET' },
+        # { path: '/system/user/:userId', method: 'GET' },
       ]
 
 # 用户相关

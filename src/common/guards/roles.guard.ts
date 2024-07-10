@@ -11,7 +11,10 @@ export class RolesGuard implements CanActivate {
 
     const role = this.reflector.getAllAndOverride('role', [ctx.getClass(), ctx.getHandler()]);
 
-    //不需要鉴权
+    // 当接口调用需要角色权限控制时，在控制器中使用 @RequireRole('admin') 装饰器注入权限
+    // 这里将会根据注入权限和用户角色权限进行判断，如果用户没有该权限，则不允许访问该接口
+    // role = @RequireRole('admin')
+    // roles 用户角色权限
     if (role) {
       return this.hasRole(role, req.user.roles);
     }

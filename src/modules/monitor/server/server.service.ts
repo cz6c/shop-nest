@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ResultData } from '@/common/utils/result';
-import os, { networkInterfaces } from 'os';
-import path from 'path';
+import * as os from 'os';
+import * as path from 'path';
 import * as nodeDiskInfo from 'node-disk-info';
 
 @Injectable()
@@ -44,7 +44,7 @@ export class ServerService {
 
   // 获取服务器IP地址
   getServerIP() {
-    const nets = networkInterfaces();
+    const nets = os.networkInterfaces();
     for (const name of Object.keys(nets)) {
       for (const net of nets[name]) {
         // 选择外部可访问的IPv4地址
