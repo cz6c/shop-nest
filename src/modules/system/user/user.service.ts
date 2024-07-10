@@ -24,6 +24,7 @@ import { RoleService } from '../role/role.service';
 import { DeptService } from '../dept/dept.service';
 
 import { ConfigService } from '../config/config.service';
+import { SysRoleEntity } from '../role/entities/role.entity';
 @Injectable()
 export class UserService {
   constructor(
@@ -405,14 +406,14 @@ export class UserService {
     }
     const roleIds = await this.getRoleIds([userId]);
     const list = await this.roleService.getPermissionsByRoleIds(roleIds as number[]);
-    const permissions = Uniq(list.map((item) => item.perms)).filter((item) => (item as string).trim());
+    const permissions = Uniq(list.map((item) => item.perms)).filter((item: string) => item.trim());
     return permissions;
   }
 
   /**
    * 获取用户信息
    */
-  async getUserinfo(userId: number): Promise<{ dept: SysDeptEntity; roles: Array<any>; posts: Array<SysPostEntity> } & UserEntity> {
+  async getUserinfo(userId: number): Promise<{ dept: SysDeptEntity; roles: Array<SysRoleEntity>; posts: Array<SysPostEntity> } & UserEntity> {
     const entity = this.userRepo.createQueryBuilder('user');
     entity.where({
       userId: userId,
@@ -784,7 +785,7 @@ export class UserService {
    * @returns
    */
   async updateProfile(user: any, updateProfileDto: UpdateProfileDto) {
-    await this.userRepo.update({ userId: user.user.userId }, updateProfileDto);
+    await this.userRepo.update({ userId: user.userId }, updateProfileDto);
     const userData = await this.redisService.get(`${CacheEnum.LOGIN_TOKEN_KEY}${user.token}`);
     userData.user.nickName = updateProfileDto.nickName;
     userData.user.email = updateProfileDto.email;

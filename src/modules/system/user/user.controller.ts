@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Query, Res, Delete, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Query, Res, Delete } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Response } from 'express';
@@ -6,6 +6,7 @@ import { RequirePermission } from '@/common/decorator/require-premission.decorat
 import { RequireRole } from '@/common/decorator/require-role.decorator';
 
 import { CreateUserDto, UpdateUserDto, ListUserDto, ChangeStatusDto, ResetPwdDto, UpdateProfileDto, UpdatePwdDto } from './dto/index';
+import { GetRequestUser, RequestUserPayload } from '@/common/decorator/getRequestUser.decorator';
 
 @ApiTags('用户管理')
 @Controller('system/user')
@@ -17,8 +18,7 @@ export class UserController {
   })
   @RequirePermission('system:user:query')
   @Get('/profile')
-  profile(@Request() req) {
-    const user = req.user.user;
+  profile(@GetRequestUser('user') user: any) {
     return this.userService.profile(user);
   }
 
@@ -27,8 +27,7 @@ export class UserController {
   })
   @RequirePermission('system:user:edit')
   @Put('/profile')
-  updateProfile(@Request() req, @Body() updateProfileDto: UpdateProfileDto) {
-    const user = req.user;
+  updateProfile(@GetRequestUser() user: RequestUserPayload, @Body() updateProfileDto: UpdateProfileDto) {
     return this.userService.updateProfile(user, updateProfileDto);
   }
 
@@ -37,8 +36,7 @@ export class UserController {
   })
   @RequirePermission('system:user:edit')
   @Put('/profile/updatePwd')
-  updatePwd(@Request() req, @Body() updatePwdDto: UpdatePwdDto) {
-    const user = req.user;
+  updatePwd(@GetRequestUser() user: RequestUserPayload, @Body() updatePwdDto: UpdatePwdDto) {
     return this.userService.updatePwd(user, updatePwdDto);
   }
 
@@ -60,8 +58,7 @@ export class UserController {
   })
   @RequirePermission('system:user:query')
   @Get('list')
-  findAll(@Query() query: ListUserDto, @Request() req) {
-    const user = req.user.user;
+  findAll(@Query() query: ListUserDto, @GetRequestUser('user') user: any) {
     return this.userService.findAll(query, user);
   }
 
@@ -132,8 +129,7 @@ export class UserController {
   })
   @RequirePermission('system:user:edit')
   @Put()
-  update(@Body() updateUserDto: UpdateUserDto, @Request() req) {
-    const userId = req.user.userId;
+  update(@Body() updateUserDto: UpdateUserDto, @GetRequestUser('userId') userId: number) {
     return this.userService.update(updateUserDto, userId);
   }
 
@@ -163,8 +159,7 @@ export class UserController {
   @ApiOperation({ summary: '导出用户信息数据为xlsx' })
   @RequirePermission('system:user:export')
   @Post('/export')
-  async export(@Res() res: Response, @Body() body: ListUserDto, @Request() req): Promise<void> {
-    const user = req.user.user;
+  async export(@Res() res: Response, @Body() body: ListUserDto, @GetRequestUser('user') user: any): Promise<void> {
     return this.userService.export(res, body, user);
   }
 }

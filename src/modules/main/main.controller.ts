@@ -9,6 +9,7 @@ import { GenerateUUID } from '@/common/utils/index';
 import { RedisService } from '@/modules/redis/redis.service';
 import { CacheEnum } from '@/common/enum/index';
 import { ConfigService } from '@/modules/system/config/config.service';
+import { GetRequestUser, RequestUserPayload } from '@/common/decorator/getRequestUser.decorator';
 
 @ApiTags('登录鉴权')
 @Controller('/')
@@ -107,8 +108,7 @@ export class MainController {
     summary: '用户信息',
   })
   @Get('/getInfo')
-  async getInfo(@Request() req) {
-    const user = req.user;
+  async getInfo(@GetRequestUser() user: RequestUserPayload) {
     return {
       msg: '操作成功',
       code: 200,
@@ -122,8 +122,7 @@ export class MainController {
     summary: '路由信息',
   })
   @Get('/getRouters')
-  getRouters(@Request() req) {
-    const userId: string = req.user.user.userId;
-    return this.mainService.getRouters(+userId);
+  getRouters(@GetRequestUser('userId') userId: number) {
+    return this.mainService.getRouters(userId);
   }
 }
